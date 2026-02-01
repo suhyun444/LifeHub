@@ -9,6 +9,7 @@ const LoginSuccessHandler = () => {
 
   useEffect(() => {
     // 1. URL에서 'token' 파라미터를 추출합니다.
+    console.log('saving token')
     const token = searchParams.get('token');
     if (token) {
       // 2. 토큰을 localStorage에 저장합니다.

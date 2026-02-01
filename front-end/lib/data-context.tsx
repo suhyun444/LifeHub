@@ -28,13 +28,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [isAuthChecked, setIsAuthChecked] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
+  const isPublicPage = pathname.startsWith("/login") || pathname.startsWith("/oauth2");
 
   useEffect(() => {
     console.log("Check user login")
     const checkLogin = async () => {
       if(isAuthChecked) return;
       console.log(pathname)
-      if (pathname.startsWith("/login") || pathname.startsWith("/oauth2")) {
+      if (isPublicPage) {
         return
       }
 
@@ -145,7 +146,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setTransactions([])
     setCategories([])
   }
-  if (!isAuthChecked) {
+  if (!isAuthChecked && !isPublicPage) {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="text-lg">Checking login status...</div>

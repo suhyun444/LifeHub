@@ -17,7 +17,7 @@ const LoginSuccessHandler = () => {
       window.location.href = '/card';
     } else {
       console.error('No token found in URL.');
-      router.push('/oauth2/authorization/google'); // 토큰이 없으면 로그인 페이지로
+      window.location.href = "/oauth2/authorization/google";
     }
   }, [router, searchParams]);
 

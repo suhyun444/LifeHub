@@ -31,20 +31,15 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const isPublicPage = pathname.startsWith("/login") || pathname.startsWith("/oauth2");
 
   useEffect(() => {
-    console.log("Check user login")
-    console.log(isAuthChecked);
     const checkLogin = async () => {
       if(isAuthChecked) return;
-      console.log(pathname)
       if (isPublicPage) {
         return
       }
 
       try {
-        console.log("DataProvider: Checking login status...")
         await api.get("/api/user/me")
         
-        console.log("DataProvider: Login verified.")
         setIsAuthChecked(true)
       } catch (error) {
         console.error("DataProvider: Login check failed, redirecting...", error)
@@ -56,12 +51,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   }, [pathname, router])
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken"); 
-    console.log(accessToken)
     if (!accessToken) {
       setTransactions([]); 
       return; 
     }
-    console.log(transactions.length)
     if(transactions.length != 0)
     {
       return;

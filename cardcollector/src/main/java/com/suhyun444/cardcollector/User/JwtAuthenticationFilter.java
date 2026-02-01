@@ -29,7 +29,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             // 1. 요청 헤더에서 JWT를 추출합니다.
             String token = parseBearerToken(request);
-            System.out.println("DoFiltering token: " + token);
             // 2. 토큰이 유효한지 검증합니다.
             if (token != null && jwtTokenProvider.validateToken(token)) {
                 // 3. 토큰에서 사용자 ID(또는 이메일)를 꺼냅니다.
@@ -44,11 +43,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         
                 // 5. SecurityContext에 인증 정보를 저장합니다. 이 요청 동안은 인증된 사용자로 간주됩니다.
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                System.out.println("Success");
             }
             else
             {
-                System.out.println("Failed");
+                System.out.println("JWT Token Authentication Failed");
             }
         } 
         catch (Exception ex) {

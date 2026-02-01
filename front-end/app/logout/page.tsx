@@ -10,7 +10,7 @@ export default function LogoutPage() {
     localStorage.removeItem("accessToken");
     localStorage.clear();
 
-    window.location.href = "/card/login/google";
+    window.location.href = "/oauth2/authorization/google";
     
   }, []);
 

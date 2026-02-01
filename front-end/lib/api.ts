@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://suhyun444.duckdns.org/card';
+const API_BASE_URL = 'https://suhyun444.duckdns.org';
 
 const request = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('accessToken');
@@ -17,12 +17,10 @@ const request = async (url: string, options: RequestInit = {}) => {
     headers,
   });
 
-  console.log(response);
   if (!response.ok) {
-    console.log(response);
     if (response.status === 401) {
       localStorage.removeItem('accessToken');
-      window.location.href = '/card/login/google'; 
+      window.location.href = '/oauth2/authorization/google'; 
       throw new Error('UnAuthorized');
     }
     throw new Error('API request failed');

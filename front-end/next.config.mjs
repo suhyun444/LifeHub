@@ -12,6 +12,9 @@ const nextConfig = {
   output: 'export',
   basePath: '/card',
   trailingSlash: true,
+  images: {
+    unoptimized: true,
+  },
 }
 
 export default nextConfig

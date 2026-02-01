@@ -43,7 +43,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         setIsAuthChecked(true)
       } catch (error) {
         console.error("DataProvider: Login check failed, redirecting...", error)
-        router.push("/login/google")
+        window.location.href = "/oauth2/authorization/google";
       }
     }
 

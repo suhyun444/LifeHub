@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.suhyun444.cardcollector.DTO.AmountUpdateDTO;
@@ -34,37 +35,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-@Controller
+@RestController
 public class MainController {
 
     @Autowired
     private TransactionService transactionService;
-
-    @GetMapping({"/login/google"})
-    public String start()
-    {
-        return "redirect:/oauth2/authorization/google";
-    }
-    
-    @GetMapping("/")
-    public String serveRoot(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        System.out.println(path);
-        System.out.println("Root access");
-        return "forward:/index.html";
-    }
-    @GetMapping(value = "/**/{path:[^\\.]*}")
-    public String forward(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        String realPath = path.replace("/card", "");
-
-        if (realPath.isEmpty() || realPath.equals("/")) {
-            return "forward:/card.html";
-        }
-
-        System.out.println("Forwarding to: " + realPath + ".html"); 
-        return "forward:" + realPath + ".html";
-    }
     
     @GetMapping("api/user/me")
     public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal Object principal) {
@@ -94,7 +69,6 @@ public class MainController {
         return ResponseEntity.ok(Map.of("message", "Success"));
     }
     @PostMapping("api/transactions/upload")
-    @ResponseBody
     public ResponseEntity<?> uploadTransactionsFromExcel(@RequestParam("file") MultipartFile file, 
                                                         @AuthenticationPrincipal String email) {
       try {

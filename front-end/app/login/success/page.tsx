@@ -9,17 +9,15 @@ const LoginSuccessHandler = () => {
 
   useEffect(() => {
     // 1. URL에서 'token' 파라미터를 추출합니다.
-    console.log('saving token')
     const token = searchParams.get('token');
     if (token) {
       // 2. 토큰을 localStorage에 저장합니다.
       localStorage.setItem('accessToken', token);
-      console.log('Token saved to localStorage.');
 
       window.location.href = '/card';
     } else {
       console.error('No token found in URL.');
-      router.push('/login/google'); // 토큰이 없으면 로그인 페이지로
+      router.push('/oauth2/authorization/google'); // 토큰이 없으면 로그인 페이지로
     }
   }, [router, searchParams]);
 

@@ -27,7 +27,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
-        // ✅ DB 조회 없이 바로 User 객체를 가져옵니다.
         User user = customOAuth2User.getUser();
 
         // JWT 생성 및 리디렉션 로직은 동일

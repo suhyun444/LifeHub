@@ -47,7 +47,6 @@ const handleAmountUpdate = async () => {
         await api.patch(`/api/transactions/${transaction.id}/amount`, { 
           amount: newAmount 
         })
-        // 백엔드 구현 전이라면 UI만 업데이트 (나중에 API 연결 필요)
         updateTransaction(transaction.id, { amount: newAmount })
         setCurrentAmount(newAmount);
         toast.success("Amount updated.")

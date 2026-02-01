@@ -42,8 +42,7 @@ jobs:
       - name: Docker 이미지 빌드 및 푸시 (ARM64)
         uses: docker/build-push-action@v4
         with:
-          context: ./cardcollector
-          file: ./cardcollector/Dockerfile 
+          context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/cardcollector:latest
           platforms: linux/arm64
@@ -54,16 +53,12 @@ jobs:
     steps:
       - name: 기존 서버 끄고 새 버전 실행
         run: |
-          # 1. 기존 컨테이너 중지 및 삭제 (에러 무시)
           docker rm -f my-server || true
           
-          # 2. 불필요한 이미지 정리 (용량 확보용)
           docker image prune -f
           
-          # 3. 최신 이미지 당겨오기
           docker pull ${{ secrets.DOCKER_USERNAME }}/cardcollector:latest
           
-          # 4. 컨테이너 실행 (환경변수 파일 경로 확인!)
           docker run -d \
             --name my-server \
             --restart always \

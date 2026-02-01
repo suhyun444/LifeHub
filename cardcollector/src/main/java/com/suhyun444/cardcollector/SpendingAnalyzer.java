@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Component // Service가 아니라 Component로 등록 (도구 역할)
+@Component
 @RequiredArgsConstructor
 public class SpendingAnalyzer {
 

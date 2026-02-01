@@ -1,0 +1,44 @@
+name: Frontend Deploy (Next.js)
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'front-end/**'
+
+jobs:
+  deploy-front:
+    runs-on: self-hosted 
+    
+    steps:
+      - name: 코드 내려받기
+        uses: actions/checkout@v3
+
+      - name: Node.js 세팅
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: front-end/package-lock.json
+
+      - name: 의존성 설치 & 빌드
+        run: |
+          cd front-end
+          npm ci
+          npm run build
+
+      - name: 결과물 배포 (Local Copy)
+        run: |
+          rsync -av --delete ./front-end/out/ /var/www/html/card/
+
+      - name: Discord Notification
+        uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          title: "🎨 프론트엔드(Next.js) 배포 결과"
+          description: "프론트엔드 변경사항 배포가 종료되었습니다! 결과: ${{ job.status }}"
+          color: 0x3498db  
+          username: GitHub Actions
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png

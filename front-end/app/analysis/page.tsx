@@ -176,12 +176,12 @@ useEffect(() => {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">
-          <Link href="/">
-            <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
-            </Button>
-          </Link>
+            </Link>
+          </Button>
           <div>
             <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
               <Brain className="h-8 w-8 text-accent" />

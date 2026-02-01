@@ -32,6 +32,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     console.log("Check user login")
+    console.log(isAuthChecked);
     const checkLogin = async () => {
       if(isAuthChecked) return;
       console.log(pathname)
@@ -55,11 +56,12 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   }, [pathname, router])
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken"); 
-
+    console.log(accessToken)
     if (!accessToken) {
-        setTransactions([]); 
-        return; 
+      setTransactions([]); 
+      return; 
     }
+    console.log(transactions.length)
     if(transactions.length != 0)
     {
       return;

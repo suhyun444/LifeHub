@@ -34,7 +34,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const checkLogin = async () => {
       if(isAuthChecked) return;
       console.log(pathname)
-      if (pathname.startsWith("/card/login") || pathname.startsWith("/oauth2")) {
+      if (pathname.startsWith("/login") || pathname.startsWith("/oauth2")) {
         return
       }
 

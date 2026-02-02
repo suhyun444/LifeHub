@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'cardcollector/**'
+      - 'back-end/**'
 
 jobs:
   build-and-push:
@@ -20,11 +20,11 @@ jobs:
           distribution: 'temurin'
 
       - name: Gradle 권한 부여
-        run: chmod +x ./cardcollector/gradlew
+        run: chmod +x ./back-end/gradlew
 
       - name: Spring Boot 빌드 (테스트 제외)
         run: |
-          cd cardcollector
+          cd back-end
           ./gradlew build -x test
 
       - name: Set up QEMU
@@ -44,7 +44,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/cardcollector:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/lifehub:latest
           platforms: linux/arm64
 
   deploy-to-pi:
@@ -53,18 +53,18 @@ jobs:
     steps:
       - name: 기존 서버 끄고 새 버전 실행
         run: |
-          docker rm -f my-server || true
+          docker rm -f lifehub-server || true
           
           docker image prune -f
           
-          docker pull ${{ secrets.DOCKER_USERNAME }}/cardcollector:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/lifehub:latest
           
           docker run -d \
-            --name my-server \
+            --name lifehub-server \
             --restart always \
             --network host \
-            --env-file /home/suhyun444/cardcollector-docker/server.env \
-            ${{ secrets.DOCKER_USERNAME }}/cardcollector:latest
+            --env-file /home/suhyun444/lifehub-docker/server.env \
+            ${{ secrets.DOCKER_USERNAME }}/lifehub:latest
 
       - name: Discord Notification
         uses: sarisia/actions-status-discord@v1

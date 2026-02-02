@@ -14,7 +14,7 @@ import com.suhyun444.lifehub.Entity.Transaction;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction,Long>{
-    @Query("SELECT new com.suhyun444.cardcollector.DTO.MerchantCategoryDto(t.merchant, t.category) " +
+    @Query("SELECT new com.suhyun444.lifehub.DTO.MerchantCategoryDto(t.merchant, t.category) " +
            "FROM Transaction t " +
            "WHERE t.merchant IN :merchants " +
            "ORDER BY t.date DESC")

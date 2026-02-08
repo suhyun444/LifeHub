@@ -6,7 +6,6 @@ import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { DataProvider } from "@/lib/data-context"
 import ToastProvider from "@/components/ToastProvider"
-import "./globals.css"
 
 export const metadata: Metadata = {
   title: "Payment History Manager",
@@ -20,14 +19,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <DataProvider>
-          <Suspense fallback={null}>{children}</Suspense>
-        </DataProvider>
-        <ToastProvider/>
-        <Analytics />
-      </body>
-    </html>
+    <div className="card-layout-container">
+      {children}
+    </div>
   )
 }

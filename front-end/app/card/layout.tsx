@@ -9,8 +9,8 @@ import ToastProvider from "@/components/ToastProvider"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Build your own dashboard",
+  title: "Payment History Manager",
+  description: "Manage and analyze your payment history with AI insights",
   generator: "v0.app",
 }
 

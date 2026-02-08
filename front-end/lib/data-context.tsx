@@ -28,7 +28,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [isAuthChecked, setIsAuthChecked] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
-  const isPublicPage = pathname.startsWith("/login") || pathname.startsWith("/oauth2");
+  const isPublicPage = pathname.startsWith("/card/login") || pathname.startsWith("/oauth2");
 
   useEffect(() => {
     const checkLogin = async () => {

@@ -11,9 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 범인 색출 (Who am I)
-        run: whoami
-
       - name: 코드 내려받기
         uses: actions/checkout@v3
 
@@ -30,9 +27,16 @@ jobs:
           npm ci
           npm run build
 
-      - name: 결과물 배포 (Local Copy)
-        run: |
-          rsync -av --delete ./front-end/out/ /var/www/html/life-hub/
+      - name: 결과물 서버로 전송 (SCP)
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }} 
+          password: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          source: "front-end/out/*"
+          target: "/var/www/html/life-hub/"
+          strip_components: 2
 
       - name: Discord Notification
         uses: sarisia/actions-status-discord@v1

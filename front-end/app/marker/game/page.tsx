@@ -103,4 +103,86 @@ function GameDetailContent() {
             key={link.id} 
             className="bg-slate-900/50 p-4 rounded-xl border border-slate-800 flex items-center justify-between group hover:border-slate-600 hover:bg-slate-900 transition-all"
           >
-            <a href={link.url} target="_blank" className="flex
+            <a href={link.url} target="_blank" className="flex items-center gap-4 flex-1 overflow-hidden">
+              {/* 아이콘: 무조건 Wiki 아이콘(BookOpen)으로 통일 */}
+              <div className="p-2.5 bg-slate-950 rounded-lg border border-slate-800 group-hover:border-slate-500 transition-colors">
+                <BookOpen size={20} className="text-emerald-400"/>
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-sm text-slate-200 group-hover:text-white truncate">{link.title}</h3>
+                <p className="text-[10px] text-slate-500 truncate mt-0.5">{link.url}</p>
+              </div>
+            </a>
+            
+            <button 
+              onClick={() => deleteLink(link.id)}
+              className="p-2 text-slate-600 hover:text-rose-500 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+            >
+              <Trash2 size={16}/>
+            </button>
+          </motion.div>
+        ))}
+        
+        {links.length === 0 && (
+            <div className="col-span-full py-16 text-center text-slate-600 border border-dashed border-slate-800 rounded-xl">
+              <p className="text-sm">No links yet. Add your first guide!</p>
+            </div>
+        )}
+      </div>
+
+      {/* 모달 (카테고리 선택 삭제됨) */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+          <motion.div 
+            initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+            className="bg-slate-900 p-6 rounded-2xl w-full max-w-sm border border-slate-700 shadow-2xl"
+          >
+            <h3 className="text-lg font-bold mb-5 text-white">Add New Link</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="text-[10px] uppercase text-slate-500 font-bold mb-1 block">Title</label>
+                <input 
+                  type="text" 
+                  autoFocus
+                  placeholder="e.g. Boss Patterns"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && addLink()}
+                />
+              </div>
+              
+              <div>
+                <label className="text-[10px] uppercase text-slate-500 font-bold mb-1 block">URL</label>
+                <input 
+                  type="text" 
+                  placeholder="https://..."
+                  className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                  value={newUrl}
+                  onChange={(e) => setNewUrl(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && addLink()}
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-2 justify-end mt-6">
+              <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-500 hover:text-white text-sm">Cancel</button>
+              <button onClick={addLink} className="px-5 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-500 text-sm shadow-lg shadow-emerald-900/20">Save</button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function GameDetail() {
+  return (
+    <div className="min-h-screen bg-slate-950 text-white p-6 font-sans">
+      <Suspense fallback={<div className="text-center pt-20">Loading...</div>}>
+        <GameDetailContent />
+      </Suspense>
+    </div>
+  );
+}

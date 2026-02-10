@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
     paths:
       - 'back-end/**'
+      - '.github/workflows/back-deploy.yml'
 
 jobs:
   build-and-push:
@@ -74,6 +75,6 @@ jobs:
           status: ${{ job.status }}
           title: "☕ 백엔드(Spring) 배포 결과"
           description: "백엔드 코드가 변경되어 재배포했습니다! 결과: ${{ job.status }}"
-          color: 0x008000 
+          color: ${{ job.status == 'success' && 0x008000 || 0xff0000 }}
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png

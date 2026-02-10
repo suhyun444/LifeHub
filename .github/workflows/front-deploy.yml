@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
     paths:
       - 'front-end/**'
-      - '.github/workflows/**'
+      - '.github/workflows/front-deploy.yml'
 
 jobs:
   deploy-front:
@@ -47,6 +47,6 @@ jobs:
           status: ${{ job.status }}
           title: "🎨 프론트엔드(Next.js) 배포 결과"
           description: "프론트엔드 변경사항 배포가 종료되었습니다! 결과: ${{ job.status }}"
-          color: 0x3498db  
+          color: ${{ job.status == 'success' && 0x3498db || 0xff0000 }} 
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png

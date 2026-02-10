@@ -1,4 +1,4 @@
-package com.suhyun444.lifehub;
+package com.suhyun444.lifehub.card.Repository;
 
 import java.util.List;
 import java.util.Set;
@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.suhyun444.lifehub.DTO.MerchantCategoryDto;
-import com.suhyun444.lifehub.Entity.Transaction;
+import com.suhyun444.lifehub.card.DTO.MerchantCategoryDto;
+import com.suhyun444.lifehub.card.Entity.Transaction;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction,Long>{
-    @Query("SELECT new com.suhyun444.lifehub.DTO.MerchantCategoryDto(t.merchant, t.category) " +
+    @Query("SELECT new com.suhyun444.lifehub.card.DTO.MerchantCategoryDto(t.merchant, t.category) " +
            "FROM Transaction t " +
            "WHERE t.merchant IN :merchants " +
            "ORDER BY t.date DESC")

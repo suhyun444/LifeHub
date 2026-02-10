@@ -1,4 +1,4 @@
-package com.suhyun444.lifehub.Converter;
+package com.suhyun444.lifehub.card.Analysis.Converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -25,11 +25,8 @@ public class User {
     Long Id;
     @Column(nullable = false,unique = true)
     private String email;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transaction> todos = new ArrayList<>();
 
-        public User(String email) {
+    public User(String email) {
         this.email = email;
-        this.todos = new ArrayList<>();
     }
 }

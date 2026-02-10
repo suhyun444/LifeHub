@@ -18,7 +18,6 @@ public class Link {
     
     private String url;
 
-    // ★ 핵심: N:1 관계 설정
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "marker_id")
     private Marker marker;

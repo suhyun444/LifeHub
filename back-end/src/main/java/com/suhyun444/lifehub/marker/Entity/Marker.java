@@ -21,7 +21,8 @@ public class Marker
     private String title;
     private String color; 
 
-   @JoinColumn(name = "userId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
     private User user;
 
     @OneToMany(mappedBy = "marker", cascade = CascadeType.ALL, orphanRemoval = true)

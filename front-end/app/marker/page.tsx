@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, BookMarked, Trash2, MapPin } from "lucide-react"; // 아이콘 변경
+import { Plus, BookMarked, Trash2, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 
-// 타입 정의: Game -> Marker
 interface Marker {
   id: string;
   title: string;
@@ -18,7 +17,7 @@ export default function MarkerLibrary() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTitle, setNewTitle] = useState("");
 
-  // 1. 로컬 스토리지 키 변경 (my-games -> my-markers)
+  // 로컬 스토리지 로드
   useEffect(() => {
     const saved = localStorage.getItem("my-markers");
     if (saved) {
@@ -26,7 +25,7 @@ export default function MarkerLibrary() {
     }
   }, []);
 
-  // 2. 마커 추가
+  // 마커 추가
   const addMarker = () => {
     if (!newTitle) return;
     
@@ -36,7 +35,7 @@ export default function MarkerLibrary() {
     const newMarker: Marker = {
       id: Date.now().toString(),
       title: newTitle,
-      desc: "Custom Bookmarks",
+      desc: "Game Guide",
       color: randomColor,
     };
 
@@ -48,10 +47,10 @@ export default function MarkerLibrary() {
     setIsModalOpen(false);
   };
 
-  // 3. 마커 삭제
+  // 마커 삭제
   const deleteMarker = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
-    if(!confirm("이 마커를 삭제하시겠습니까? 저장된 링크도 모두 삭제됩니다.")) return;
+    if(!confirm("삭제하시겠습니까? 저장된 링크도 모두 삭제됩니다.")) return;
 
     const updated = markers.filter(m => m.id !== id);
     setMarkers(updated);
@@ -80,7 +79,10 @@ export default function MarkerLibrary() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
           {markers.map((marker) => (
-            <Link key={marker.id} href={`/marker/${marker.id}?title=${encodeURIComponent(marker.title)}&color=${marker.color}`}>
+            <Link 
+              key={marker.id} 
+              href={`/marker/game?id=${marker.id}&title=${encodeURIComponent(marker.title)}&color=${marker.color}`}
+            >
               <motion.div 
                 whileHover={{ y: -5, scale: 1.02 }}
                 className={`relative h-44 rounded-2xl p-6 flex flex-col justify-between shadow-xl cursor-pointer group overflow-hidden ${marker.color}`}
@@ -95,7 +97,7 @@ export default function MarkerLibrary() {
 
                 <div className="z-10 flex justify-between items-center mt-4">
                   <span className="text-[10px] font-bold bg-black/20 px-3 py-1.5 rounded-full backdrop-blur-md group-hover:bg-black/30 transition-colors">
-                    OPEN
+                    OPEN GAME
                   </span>
                   <button 
                     onClick={(e) => deleteMarker(e, marker.id)}
@@ -127,7 +129,7 @@ export default function MarkerLibrary() {
             initial={{scale: 0.9, opacity: 0}} animate={{scale: 1, opacity: 1}}
             className="bg-slate-900 p-6 rounded-2xl w-full max-w-sm border border-slate-700 shadow-2xl"
           >
-            <h3 className="text-lg font-bold mb-4 text-white">새 마커 생성</h3>
+            <h3 className="text-lg font-bold mb-4 text-white">새 게임 마커 생성</h3>
             <input 
               autoFocus
               type="text" 

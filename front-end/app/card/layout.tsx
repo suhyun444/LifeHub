@@ -19,8 +19,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="card-layout-container">
-      {children}
-    </div>
+    <DataProvider>
+      <Suspense fallback={<div>Loading financial data...</div>}>
+        {children}
+      </Suspense>
+    </DataProvider>
   )
 }

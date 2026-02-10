@@ -47,12 +47,12 @@ public class MarkerController {
         return ResponseEntity.ok(Map.of("message","Success to delete"));
     }
     
-    @PostMapping("api/marker/{markerId}/links")
+    @PostMapping("api/markers/{markerId}/links")
     public ResponseEntity<Long> addLink(@PathVariable Long markerId, @RequestBody LinkDto linkDto) {
         return ResponseEntity.ok(markerService.addLink(markerId, linkDto));
     }
-    @DeleteMapping("api/marker/{markerId}/links")
-        public ResponseEntity<?> deleteLink(@PathVariable Long markerId, @RequestBody LinkDto linkDto) 
+    @DeleteMapping("api/markers/{markerId}/links")
+    public ResponseEntity<?> deleteLink(@PathVariable Long markerId, @RequestBody LinkDto linkDto) 
     {
         markerService.deleteLink(linkDto);
         return ResponseEntity.ok(Map.of("message","Success to delete"));

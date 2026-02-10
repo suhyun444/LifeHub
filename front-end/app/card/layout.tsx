@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
+import { Suspense } from "react"
 import { DataProvider } from "@/lib/data-context"
 import ToastProvider from "@/components/ToastProvider"
 
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <DataProvider>
+      <Suspense fallback={<div>Loading financial data...</div>}>
         {children}
+      </Suspense>
     </DataProvider>
   )
 }

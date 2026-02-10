@@ -1,4 +1,5 @@
 import { MarkerProvider } from "@/lib/marker-context";
+import { Suspense } from "react";
 
 export default function MarkerLayout({
   children,
@@ -7,7 +8,9 @@ export default function MarkerLayout({
 }) {
   return (
     <MarkerProvider>
-      {children}
+      <Suspense fallback={<div>Loading marker data...</div>}>
+        {children}
+      </Suspense>
     </MarkerProvider>
   );
 }

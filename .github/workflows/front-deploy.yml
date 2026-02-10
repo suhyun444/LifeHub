@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: 범인 색출 (Who am I)
+        run: whoami
+
       - name: 코드 내려받기
         uses: actions/checkout@v3
 

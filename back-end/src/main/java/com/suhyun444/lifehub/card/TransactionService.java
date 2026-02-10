@@ -1,4 +1,4 @@
-package com.suhyun444.lifehub;
+package com.suhyun444.lifehub.card;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -15,17 +15,20 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.suhyun444.lifehub.SpendingAnalyzer;
-import com.suhyun444.lifehub.DTO.AnalysisDto;
-import com.suhyun444.lifehub.DTO.CategoryUpdateDTO;
-import com.suhyun444.lifehub.DTO.MerchantCategoryDto;
-import com.suhyun444.lifehub.DTO.TransactionDto;
-import com.suhyun444.lifehub.Entity.AnalysisHistory;
-import com.suhyun444.lifehub.Entity.Transaction;
-import com.suhyun444.lifehub.Entity.User;
-import com.suhyun444.lifehub.Parser.KookminTransactionParser;
-import com.suhyun444.lifehub.Parser.TransactionParser;
 import com.suhyun444.lifehub.User.UserRepository;
+import com.suhyun444.lifehub.card.Component.SpendingAnalyzer;
+import com.suhyun444.lifehub.card.Component.TransactionCategorizer;
+import com.suhyun444.lifehub.card.DTO.AnalysisDto;
+import com.suhyun444.lifehub.card.DTO.CategoryUpdateDto;
+import com.suhyun444.lifehub.card.DTO.MerchantCategoryDto;
+import com.suhyun444.lifehub.card.DTO.TransactionDto;
+import com.suhyun444.lifehub.card.Entity.AnalysisHistory;
+import com.suhyun444.lifehub.card.Entity.Transaction;
+import com.suhyun444.lifehub.card.Entity.User;
+import com.suhyun444.lifehub.card.Parser.KookminTransactionParser;
+import com.suhyun444.lifehub.card.Parser.TransactionParser;
+import com.suhyun444.lifehub.card.Repository.AnalysisHistoryRepository;
+import com.suhyun444.lifehub.card.Repository.TransactionRepository;
 
 import jakarta.transaction.Transactional;
 

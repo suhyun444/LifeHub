@@ -1,9 +1,10 @@
-package com.suhyun444.lifehub.card.Analysis.Converter;
+package com.suhyun444.lifehub.card.Component.Converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.suhyun444.lifehub.DTO.AnalysisDto;
+import com.suhyun444.lifehub.card.DTO.AnalysisDto;
+
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

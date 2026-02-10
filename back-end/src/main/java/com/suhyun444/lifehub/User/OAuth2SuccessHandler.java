@@ -8,7 +8,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.suhyun444.lifehub.Entity.User;
+import com.suhyun444.lifehub.card.Entity.User;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

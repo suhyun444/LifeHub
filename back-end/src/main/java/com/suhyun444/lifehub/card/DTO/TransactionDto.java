@@ -1,6 +1,6 @@
-package com.suhyun444.lifehub.DTO;
+package com.suhyun444.lifehub.card.DTO;
 
-import com.suhyun444.lifehub.Entity.Transaction;
+import com.suhyun444.lifehub.card.Entity.Transaction;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class TransactionDto {
     private String description;
     private PaymentStatus status;
     private String paymentMethod;
-     public static TransactionDto from(Transaction transaction) {
+    public static TransactionDto from(Transaction transaction) {
         return new TransactionDto(
             String.valueOf(transaction.getId()),
             transaction.getDate(),

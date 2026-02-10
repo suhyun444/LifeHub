@@ -5,7 +5,8 @@ import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
-import com.suhyun444.lifehub.Entity.User;
+
+import com.suhyun444.lifehub.card.Entity.User;
 
 public class CustomOAuth2User extends DefaultOAuth2User {
     private final User user;

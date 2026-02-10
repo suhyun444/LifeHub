@@ -1,11 +1,11 @@
-package com.suhyun444.lifehub.Entity;
+package com.suhyun444.lifehub.card.Entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import com.suhyun444.lifehub.DTO.AnalysisDto;
-import com.suhyun444.lifehub.card.Analysis.Converter.TrendListConverter; // 컨버터 위치에 맞게 import
-import com.suhyun444.lifehub.card.Analysis.Converter.RecommendationListConverter;
+import com.suhyun444.lifehub.card.Component.Converter.RecommendationListConverter;
+import com.suhyun444.lifehub.card.Component.Converter.TrendListConverter;
+import com.suhyun444.lifehub.card.DTO.AnalysisDto;
 
 import jakarta.persistence.*;
 import lombok.Builder;

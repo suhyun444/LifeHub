@@ -1,4 +1,4 @@
-package com.suhyun444.lifehub.Entity;
+package com.suhyun444.lifehub.card.Entity;
 
 import java.util.ArrayList;
 import java.util.List;

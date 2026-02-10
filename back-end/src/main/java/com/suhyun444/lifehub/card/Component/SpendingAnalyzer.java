@@ -1,9 +1,10 @@
-package com.suhyun444.lifehub;
+package com.suhyun444.lifehub.card.Component;
 
-import com.suhyun444.lifehub.DTO.AnalysisDto;
-import com.suhyun444.lifehub.DTO.GroqResponse;
-import com.suhyun444.lifehub.DTO.TransactionDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.suhyun444.lifehub.card.DTO.AnalysisDto;
+import com.suhyun444.lifehub.card.DTO.GroqResponse;
+import com.suhyun444.lifehub.card.DTO.TransactionDto;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

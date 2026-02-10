@@ -1,4 +1,4 @@
-package com.suhyun444.lifehub.Entity;
+package com.suhyun444.lifehub.card.Entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

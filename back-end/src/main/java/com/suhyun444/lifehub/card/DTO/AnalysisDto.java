@@ -1,12 +1,12 @@
-package com.suhyun444.lifehub.DTO;
+package com.suhyun444.lifehub.card.DTO;
 
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import java.util.List;
 
-import com.suhyun444.lifehub.Entity.AnalysisHistory;
-import com.suhyun444.lifehub.Entity.Transaction;
+import com.suhyun444.lifehub.card.Entity.AnalysisHistory;
+import com.suhyun444.lifehub.card.Entity.Transaction;
 
 public class AnalysisDto {
 

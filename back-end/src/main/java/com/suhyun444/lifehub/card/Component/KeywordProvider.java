@@ -1,4 +1,4 @@
-package com.suhyun444.lifehub;
+package com.suhyun444.lifehub.card.Component;
 
 import java.util.Map;
 

@@ -3,7 +3,7 @@
  * https://www.perplexity.ai/search/web-gaebalhalddae-peuronteuneu-jWN91u2mTfqV7HqciyateA
  * https://chatgpt.com/c/68c64fb3-1430-8325-968d-0f26d2b48bcc
  */
-package com.suhyun444.lifehub;
+package com.suhyun444.lifehub.card;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,18 +25,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.suhyun444.lifehub.DTO.AmountUpdateDTO;
-import com.suhyun444.lifehub.DTO.AnalysisDto;
-import com.suhyun444.lifehub.DTO.CategoryUpdateDTO;
-import com.suhyun444.lifehub.DTO.PaymentStatus;
-import com.suhyun444.lifehub.DTO.TransactionDto;
+import com.suhyun444.lifehub.card.DTO.AmountUpdateDto;
+import com.suhyun444.lifehub.card.DTO.AnalysisDto;
+import com.suhyun444.lifehub.card.DTO.CategoryUpdateDto;
+import com.suhyun444.lifehub.card.DTO.PaymentStatus;
+import com.suhyun444.lifehub.card.DTO.TransactionDto;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-public class MainController {
+public class CardController {
 
     @Autowired
     private TransactionService transactionService;
@@ -55,11 +55,11 @@ public class MainController {
     }
     
     @PatchMapping("api/transactions/{id}/category")
-    public ResponseEntity<TransactionDto> patchCategory(@PathVariable Long id,@RequestBody CategoryUpdateDTO request) {        
+    public ResponseEntity<TransactionDto> patchCategory(@PathVariable Long id,@RequestBody CategoryUpdateDto request) {        
         return ResponseEntity.ok(transactionService.updateCategory(id,request.category()));
     }
     @PatchMapping("api/transactions/{id}/amount")
-    public ResponseEntity<?> patchAmount(@PathVariable Long id,@RequestBody AmountUpdateDTO request) {        
+    public ResponseEntity<?> patchAmount(@PathVariable Long id,@RequestBody AmountUpdateDto request) {        
         transactionService.updateAmount(id,request.amount());
         return ResponseEntity.ok(Map.of("message", "Success"));
     }

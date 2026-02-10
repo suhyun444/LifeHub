@@ -1,4 +1,4 @@
-package com.suhyun444.lifehub.DTO;
+package com.suhyun444.lifehub.card.DTO;
 
 import java.util.List;
 

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.suhyun444.lifehub.Entity.User;
+import com.suhyun444.lifehub.card.Entity.User;
 
 import java.security.Key;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.suhyun444.lifehub;
+package com.suhyun444.lifehub.card.Repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.suhyun444.lifehub.DTO.MerchantCategoryDto;
-import com.suhyun444.lifehub.Entity.AnalysisHistory;
-import com.suhyun444.lifehub.Entity.Transaction;
+import com.suhyun444.lifehub.card.DTO.MerchantCategoryDto;
+import com.suhyun444.lifehub.card.Entity.AnalysisHistory;
+import com.suhyun444.lifehub.card.Entity.Transaction;
 
 @Repository
 public interface AnalysisHistoryRepository extends JpaRepository<AnalysisHistory,Long>{

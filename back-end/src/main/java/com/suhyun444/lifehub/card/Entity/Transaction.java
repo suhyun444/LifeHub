@@ -1,4 +1,4 @@
-package com.suhyun444.lifehub.Entity;
+package com.suhyun444.lifehub.card.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import com.suhyun444.lifehub.DTO.PaymentStatus;
-import com.suhyun444.lifehub.DTO.TransactionDto;
+import com.suhyun444.lifehub.card.DTO.PaymentStatus;
+import com.suhyun444.lifehub.card.DTO.TransactionDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,10 +1,10 @@
-package com.suhyun444.lifehub.Parser;
+package com.suhyun444.lifehub.card.Parser;
 
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Sheet;
 
-import com.suhyun444.lifehub.Entity.Transaction;
+import com.suhyun444.lifehub.card.Entity.Transaction;
 
 public abstract class TransactionParser {
     abstract public List<Transaction> parse(Sheet sheet);

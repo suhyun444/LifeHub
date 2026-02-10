@@ -1,11 +1,11 @@
-package com.suhyun444.lifehub.Parser;
+package com.suhyun444.lifehub.card.Parser;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.poi.ss.usermodel.*;
 
-import com.suhyun444.lifehub.DTO.PaymentStatus;
-import com.suhyun444.lifehub.Entity.Transaction;
+import com.suhyun444.lifehub.card.DTO.PaymentStatus;
+import com.suhyun444.lifehub.card.Entity.Transaction;
 
 public class KookminTransactionParser extends TransactionParser {
     @Override

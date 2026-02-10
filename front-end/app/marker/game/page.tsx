@@ -200,7 +200,6 @@ function GameDetailContent() {
   );
 }
 
-// Suspense로 감싸서 빌드 에러 방지
 export default function GameDetail() {
   return (
     <div className="min-h-screen bg-slate-950 text-white p-6 font-sans">

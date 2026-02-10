@@ -1,5 +1,5 @@
 package com.suhyun444.lifehub.card.DTO;
 
-public record CategoryUpdateDTO(String category) {
+public record CategoryUpdateDto(String category) {
     
 }

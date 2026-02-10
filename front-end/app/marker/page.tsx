@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Plus, BookMarked, Trash2, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
+import { useMarkers } from "@/lib/marker-context"; 
 
 interface Marker {
   id: string;
@@ -13,50 +14,22 @@ interface Marker {
 }
 
 export default function MarkerLibrary() {
-  const [markers, setMarkers] = useState<Marker[]>([]);
+  const { markers, isLoading, createMarker, deleteMarker } = useMarkers();
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTitle, setNewTitle] = useState("");
 
-  // 로컬 스토리지 로드
-  useEffect(() => {
-    const saved = localStorage.getItem("my-markers");
-    if (saved) {
-      setMarkers(JSON.parse(saved));
-    }
-  }, []);
-
-  // 마커 추가
-  const addMarker = () => {
+  const handleAdd = async () => {
     if (!newTitle) return;
-    
     const colors = ["bg-rose-600", "bg-blue-600", "bg-emerald-600", "bg-violet-600", "bg-slate-700", "bg-amber-600"];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
-
-    const newMarker: Marker = {
-      id: Date.now().toString(),
-      title: newTitle,
-      desc: "Game Guide",
-      color: randomColor,
-    };
-
-    const updated = [...markers, newMarker];
-    setMarkers(updated);
-    localStorage.setItem("my-markers", JSON.stringify(updated));
     
+    await createMarker(newTitle, randomColor); // Context 함수 호출
     setNewTitle("");
     setIsModalOpen(false);
   };
 
-  // 마커 삭제
-  const deleteMarker = (e: React.MouseEvent, id: string) => {
-    e.preventDefault();
-    if(!confirm("삭제하시겠습니까? 저장된 링크도 모두 삭제됩니다.")) return;
-
-    const updated = markers.filter(m => m.id !== id);
-    setMarkers(updated);
-    localStorage.setItem("my-markers", JSON.stringify(updated));
-    localStorage.removeItem(`marker-links-${id}`);
-  };
+  if (isLoading) return <div className="p-10 text-white">Loading...</div>;
 
   return (
     <div className="min-h-screen bg-slate-950 text-white p-8 font-sans">
@@ -100,7 +73,7 @@ export default function MarkerLibrary() {
                     OPEN GAME
                   </span>
                   <button 
-                    onClick={(e) => deleteMarker(e, marker.id)}
+                    onClick={(e) => { e.preventDefault(); if(confirm("삭제?")) deleteMarker(marker.id);}}
                     className="p-2 text-white/50 hover:text-white hover:bg-white/20 rounded-full transition-all"
                   >
                     <Trash2 size={16}/>
@@ -137,11 +110,11 @@ export default function MarkerLibrary() {
               className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white mb-4 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && addMarker()}
+              onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
             />
             <div className="flex gap-2 justify-end">
               <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-400 hover:text-white text-sm">Cancel</button>
-              <button onClick={addMarker} className="px-5 py-2 bg-rose-600 rounded-lg font-bold hover:bg-rose-500 text-sm shadow-lg shadow-rose-600/20">Create</button>
+              <button onClick={handleAdd} className="px-5 py-2 bg-rose-600 rounded-lg font-bold hover:bg-rose-500 text-sm shadow-lg shadow-rose-600/20">Create</button>
             </div>
           </motion.div>
         </div>

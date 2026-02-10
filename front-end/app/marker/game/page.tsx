@@ -1,16 +1,10 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { ArrowLeft, Plus, Trash2, BookOpen } from "lucide-react"; // 불필요한 아이콘 제거
+import { ArrowLeft, Plus, Trash2, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
-
-// 카테고리 필드 제거
-interface LinkItem {
-  id: string;
-  title: string;
-  url: string;
-}
+import { useMarkers } from "@/lib/marker-context"; // ★ Context 가져오기
 
 function GameDetailContent() {
   const searchParams = useSearchParams();
@@ -20,49 +14,57 @@ function GameDetailContent() {
   const title = searchParams.get("title") || "Game Guide";
   const color = searchParams.get("color") || "bg-slate-800";
 
-  const [links, setLinks] = useState<LinkItem[]>([]);
+  const { markers, addLink, deleteLink } = useMarkers();
+
+  const currentMarker = markers.find((m) => m.id === markerId);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
   const [newTitle, setNewTitle] = useState("");
   const [newUrl, setNewUrl] = useState("");
 
-  useEffect(() => {
-    if (markerId) {
-      const saved = localStorage.getItem(`marker-links-${markerId}`);
-      if (saved) setLinks(JSON.parse(saved));
-    }
-  }, [markerId]);
-
-  const addLink = () => {
+  const handleAddLink = async () => {
     if (!newTitle || !newUrl || !markerId) return;
 
     let finalUrl = newUrl;
     if (!finalUrl.startsWith('http')) finalUrl = 'https://' + finalUrl;
-
-    const newLink: LinkItem = {
-      id: Date.now().toString(),
-      title: newTitle,
-      url: finalUrl,
-    };
-
-    const updated = [...links, newLink];
-    setLinks(updated);
-    localStorage.setItem(`marker-links-${markerId}`, JSON.stringify(updated));
+    
+    await addLink(markerId, newTitle, finalUrl);
     
     setNewTitle("");
     setNewUrl("");
     setIsModalOpen(false);
   };
 
-  const deleteLink = (id: string) => {
-    const updated = links.filter(l => l.id !== id);
-    setLinks(updated);
-    if (markerId) {
-        localStorage.setItem(`marker-links-${markerId}`, JSON.stringify(updated));
-    }
+  // 링크 삭제 핸들러
+  const handleDeleteLink = async (linkId: string) => {
+    if (!markerId) return;
+    if (!confirm("이 링크를 삭제하시겠습니까?")) return;
+
+    // Context 함수 사용
+    await deleteLink(markerId, linkId);
   };
 
+  // 마커 로딩 중일 때 표시 (새로고침 직후 등)
   if (!markerId) return null;
+  
+  // 데이터가 아직 안 왔으면 로딩 중 표시 대신, 일단 빈 껍데기라도 보여주거나 로딩 UI
+  // 여기서는 간단하게 로딩 텍스트 처리 (디자인에 맞춰 스켈레톤으로 바꿔도 됨)
+  if (!currentMarker && markers.length === 0) {
+    return <div className="text-center pt-20 text-slate-500">Loading game data...</div>;
+  }
+  
+  // 마커는 로딩됐는데 ID가 없는 경우 (삭제된 마커 등) -> 뒤로 가기
+  if (!currentMarker && markers.length > 0) {
+    return (
+        <div className="text-center pt-20">
+            <p className="text-slate-400 mb-4">Game not found.</p>
+            <button onClick={() => router.push('/marker')} className="text-rose-500 underline">Go Back</button>
+        </div>
+    );
+  }
+
+  // ★ 안전장치: currentMarker가 있을 때만 links를 씀 (없으면 빈 배열)
+  const links = currentMarker ? currentMarker.links : [];
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -104,7 +106,6 @@ function GameDetailContent() {
             className="bg-slate-900/50 p-4 rounded-xl border border-slate-800 flex items-center justify-between group hover:border-slate-600 hover:bg-slate-900 transition-all"
           >
             <a href={link.url} target="_blank" className="flex items-center gap-4 flex-1 overflow-hidden">
-              {/* 아이콘: 무조건 Wiki 아이콘(BookOpen)으로 통일 */}
               <div className="p-2.5 bg-slate-950 rounded-lg border border-slate-800 group-hover:border-slate-500 transition-colors">
                 <BookOpen size={20} className="text-emerald-400"/>
               </div>
@@ -115,7 +116,7 @@ function GameDetailContent() {
             </a>
             
             <button 
-              onClick={() => deleteLink(link.id)}
+              onClick={() => handleDeleteLink(link.id)}
               className="p-2 text-slate-600 hover:text-rose-500 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
             >
               <Trash2 size={16}/>
@@ -130,7 +131,7 @@ function GameDetailContent() {
         )}
       </div>
 
-      {/* 모달 (카테고리 선택 삭제됨) */}
+      {/* 모달 */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
           <motion.div 
@@ -149,7 +150,7 @@ function GameDetailContent() {
                   className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && addLink()}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddLink()}
                 />
               </div>
               
@@ -161,14 +162,14 @@ function GameDetailContent() {
                   className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
                   value={newUrl}
                   onChange={(e) => setNewUrl(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && addLink()}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddLink()}
                 />
               </div>
             </div>
 
             <div className="flex gap-2 justify-end mt-6">
               <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-500 hover:text-white text-sm">Cancel</button>
-              <button onClick={addLink} className="px-5 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-500 text-sm shadow-lg shadow-emerald-900/20">Save</button>
+              <button onClick={handleAddLink} className="px-5 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-500 text-sm shadow-lg shadow-emerald-900/20">Save</button>
             </div>
           </motion.div>
         </div>

@@ -26,4 +26,12 @@ public class Marker
 
     @OneToMany(mappedBy = "marker", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Link> links = new ArrayList<>();
+
+    public Marker(String title, String color, User user)
+    {
+        this.title = title;
+        this.color = color;
+        this.user = user;
+        this.links = new ArrayList<>();
+    }
 }

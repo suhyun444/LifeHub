@@ -14,7 +14,7 @@ const LoginSuccessHandler = () => {
       // 2. 토큰을 localStorage에 저장합니다.
       localStorage.setItem('accessToken', token);
 
-      window.location.href = '/card';
+      window.location.href = '/';
     } else {
       console.error('No token found in URL.');
       window.location.href = "/oauth2/authorization/google";

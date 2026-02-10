@@ -181,9 +181,7 @@ function GameDetailContent() {
 export default function GameDetail() {
   return (
     <div className="min-h-screen bg-slate-950 text-white p-6 font-sans">
-      <Suspense fallback={<div className="text-center pt-20">Loading...</div>}>
-        <GameDetailContent />
-      </Suspense>
+      <GameDetailContent />
     </div>
   );
 }

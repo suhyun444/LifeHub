@@ -64,7 +64,7 @@ public class MarkerService {
     public List<MarkerDto> GetMarkers(String email)
     {
         User user = userRepository.findByEmail(email).orElseThrow();
-        List<Marker> markers = markerRepository.findByUserId(user.getId());
+        List<Marker> markers = markerRepository.findByUserIdOrderByIdDesc(user.getId());
 
         List<MarkerDto> results = markers.stream().map(MarkerDto::from).collect(Collectors.toList());
         return results;

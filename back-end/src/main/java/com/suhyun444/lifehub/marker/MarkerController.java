@@ -40,7 +40,7 @@ public class MarkerController {
         return ResponseEntity.ok(markerService.GetMarkers(email));
     }
 
-    @DeleteMapping("api/markers{markerId}")
+    @DeleteMapping("api/markers/{markerId}")
     public ResponseEntity<?> deleteMarker(@PathVariable Long markerId) 
     {
         markerService.deleteMarker(markerId);

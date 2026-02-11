@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { api } from "@/lib/api";
+import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 
 // --- 타입 정의 ---
 export interface LinkItem {
@@ -33,28 +35,34 @@ export function MarkerProvider({ children }: { children: ReactNode }) {
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 1. 초기 로딩: 한 번에 싹 다 가져오기
+ const router = useRouter();
+  const pathname = usePathname();
+
   useEffect(() => {
-    const fetchAll = async () => {
+    const initialize = async () => {
       try {
-        // 백엔드: GET /api/markers (링크 포함해서 줘야 함!)
+        await api.get("/api/user/me"); 
+
         const data = await api.get("/api/markers");
         
-        // 데이터 정제 (ID 숫자를 문자로)
         const formatted = data.map((m: any) => ({
           ...m,
           id: m.id.toString(),
           links: m.links ? m.links.map((l: any) => ({...l, id: l.id.toString()})) : []
         }));
+        
         setMarkers(formatted);
-      } catch (e) {
-        console.error("데이터 로딩 실패", e);
+      } catch (e: any) {
+        console.error("인증 실패 또는 데이터 로딩 실패:", e);
+        
+        window.location.href = "https://suhyun444.duckdns.org/oauth2/authorization/google";
       } finally {
         setIsLoading(false);
       }
     };
-    fetchAll();
-  }, []);
+
+    initialize();
+  }, [pathname, router]);
 
   // 2. 마커 생성
   const createMarker = async (title: string, color: string) => {

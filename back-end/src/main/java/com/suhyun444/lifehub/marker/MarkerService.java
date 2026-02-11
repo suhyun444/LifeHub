@@ -71,9 +71,8 @@ public class MarkerService {
     }
 
     @Transactional
-    public void deleteLink(LinkDto linkDto)
+    public void deleteLink(Long linkId)
     {
-        Link link = linkRepository.findById(linkDto.getId()).orElseThrow();
-        linkRepository.delete(link);
+        linkRepository.deleteById(linkId);
     }
 }

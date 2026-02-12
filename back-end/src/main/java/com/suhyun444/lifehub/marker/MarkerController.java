@@ -13,6 +13,7 @@ import com.suhyun444.lifehub.marker.DTO.MarkerDto;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,5 +57,10 @@ public class MarkerController {
     {
         markerService.deleteLink(linkId);
         return ResponseEntity.ok(Map.of("message","Success to delete"));
+    }
+    @PatchMapping("/{markerId}/move")
+    public ResponseEntity<Void> moveMarker(@AuthenticationPrincipal String email,@PathVariable Long markerId, @RequestBody Map<String, Long> request) {
+        markerService.moveMarker(email,markerId, request.get("newOrder"));
+        return ResponseEntity.ok().build();
     }
 }

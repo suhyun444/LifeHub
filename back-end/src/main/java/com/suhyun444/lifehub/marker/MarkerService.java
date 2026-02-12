@@ -1,5 +1,6 @@
 package com.suhyun444.lifehub.marker;
 
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,8 +39,10 @@ public class MarkerService {
     @Transactional
     public Long createMarker(String email, MarkerDto dto) {
         User user = userRepository.findByEmail(email).orElseThrow();
-        
-        Marker marker = new Marker(dto.getTitle(), dto.getColor(), user);
+        Long maxOrder = markerRepository.findMaxSortOrder(user.getId()).orElseThrow();
+
+        Long newOrder = maxOrder + 1;
+        Marker marker = new Marker(dto.getTitle(), dto.getColor(), user,newOrder);
         return markerRepository.save(marker).getId();
     }
 
@@ -64,7 +67,7 @@ public class MarkerService {
     public List<MarkerDto> GetMarkers(String email)
     {
         User user = userRepository.findByEmail(email).orElseThrow();
-        List<Marker> markers = markerRepository.findByUserIdOrderByIdDesc(user.getId());
+        List<Marker> markers = markerRepository.findAllByUserIdOrderBySortOrderDesc(user.getId());
 
         List<MarkerDto> results = markers.stream().map(MarkerDto::from).collect(Collectors.toList());
         return results;
@@ -74,5 +77,25 @@ public class MarkerService {
     public void deleteLink(Long linkId)
     {
         linkRepository.deleteById(linkId);
+    }
+    @Transactional
+    public void moveMarker(String email, Long markerId, Long newOrder) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        Marker marker = markerRepository.findById(markerId)
+                .orElseThrow(() -> new IllegalArgumentException("Marker not found"));
+        
+
+        Long currentOrder = marker.getSortOrder();
+        if (currentOrder.equals(newOrder)) return;
+
+
+        if (currentOrder > newOrder) {
+            markerRepository.shiftOrdersIncrement(user.getId(), newOrder, currentOrder);
+        } else {
+            markerRepository.shiftOrdersDecrement(user.getId(), currentOrder, newOrder);
+        }
+
+        marker.setSortOrder(newOrder);
+        markerRepository.save(marker);
     }
 }

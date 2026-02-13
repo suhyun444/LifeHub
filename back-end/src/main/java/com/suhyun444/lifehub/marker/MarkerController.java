@@ -58,7 +58,7 @@ public class MarkerController {
         markerService.deleteLink(linkId);
         return ResponseEntity.ok(Map.of("message","Success to delete"));
     }
-    @PatchMapping("/{markerId}/move")
+    @PatchMapping("api/markers/{markerId}/move")
     public ResponseEntity<Void> moveMarker(@AuthenticationPrincipal String email,@PathVariable Long markerId, @RequestBody Map<String, Long> request) {
         markerService.moveMarker(email,markerId, request.get("newOrder"));
         return ResponseEntity.ok().build();

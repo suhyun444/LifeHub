@@ -16,15 +16,6 @@ import com.suhyun444.lifehub.card.Entity.User;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(
-    name = "marker",
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "uk_user_sort_order", // 제약조건 이름
-            columnNames = {"user_id", "sort_order"} // 유저ID와 순서의 조합은 유니크해야 함
-        )
-    }
-)
 public class Marker
 {
 

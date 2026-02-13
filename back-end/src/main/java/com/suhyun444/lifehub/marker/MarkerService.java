@@ -37,13 +37,15 @@ public class MarkerService {
     }   
 
     @Transactional
-    public Long createMarker(String email, MarkerDto dto) {
+    public MarkerDto createMarker(String email, MarkerDto dto) {
         User user = userRepository.findByEmail(email).orElseThrow();
         Long maxOrder = markerRepository.findMaxSortOrder(user.getId()).orElseThrow();
 
         Long newOrder = maxOrder + 1;
         Marker marker = new Marker(dto.getTitle(), dto.getColor(), user,newOrder);
-        return markerRepository.save(marker).getId();
+        markerRepository.save(marker);
+        MarkerDto markerDto = MarkerDto.from(marker);
+        return markerDto;
     }
 
     @Transactional

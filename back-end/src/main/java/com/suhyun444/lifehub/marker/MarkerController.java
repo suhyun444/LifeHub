@@ -31,7 +31,7 @@ public class MarkerController {
     }
     
     @PostMapping("api/markers")
-    public ResponseEntity<Long> createMarker(@AuthenticationPrincipal String email,@RequestBody MarkerDto markerDto) {
+    public ResponseEntity<MarkerDto> createMarker(@AuthenticationPrincipal String email,@RequestBody MarkerDto markerDto) {
         
         return ResponseEntity.ok(markerService.createMarker(email, markerDto));
     }

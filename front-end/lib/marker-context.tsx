@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { api } from "@/lib/api";
 import { useRouter, usePathname } from "next/navigation";
+import { arrayMove } from "@dnd-kit/sortable";
 
 // --- 타입 정의 ---
 export interface LinkItem {
@@ -16,6 +17,7 @@ export interface Marker {
   title: string;
   color: string;
   desc?: string;
+  sortOrder: number;
   links: LinkItem[]; // ★ 링크까지 통째로 들고 있음
 }
 
@@ -23,6 +25,7 @@ interface MarkerContextType {
   markers: Marker[];
   isLoading: boolean;
   createMarker: (title: string, color: string) => Promise<void>;
+  moveMarker: (activeId: string, overId: string) => Promise<void>; 
   deleteMarker: (id: string) => Promise<void>;
   addLink: (markerId: string, title: string, url: string) => Promise<void>;
   deleteLink: (markerId: string, linkId: string) => Promise<void>;
@@ -47,6 +50,7 @@ export function MarkerProvider({ children }: { children: ReactNode }) {
         const formatted = data.map((m: any) => ({
           ...m,
           id: m.id.toString(),
+          sortOrder: m.sortOrder || 0,
           links: m.links ? m.links.map((l: any) => ({...l, id: l.id.toString()})) : []
         }));
         
@@ -65,20 +69,37 @@ export function MarkerProvider({ children }: { children: ReactNode }) {
 
   // 2. 마커 생성
   const createMarker = async (title: string, color: string) => {
-    // 서버 요청
-    const newId = await api.post("/api/markers", { title, color });
-    
-    // 로컬 업데이트 (서버 다시 안 부르고 내가 만든 거 바로 추가)
-    const newMarker: Marker = {
-      id: newId.toString(),
-      title,
-      color,
-      desc: "Game Guide",
-      links: []
-    };
-    setMarkers(prev => [newMarker, ...prev]);
+    try {
+      const newMarkerData = await api.post("/api/markers", { title, color });
+      
+      const newMarker: Marker = {
+        ...newMarkerData,
+        id: newMarkerData.id.toString(),
+        links: newMarkerData.links || []
+      };
+
+      setMarkers(prev => [newMarker, ...prev]);
+      
+    } catch (error) {
+      console.error("마커 생성 실패:", error);
+      alert("마커 생성 중 오류가 발생했습니다.");
+    }
   };
 
+  const moveMarker = async (activeId: string, overId: string) => {
+    // 1. Optimistic Update (화면 먼저 바꾸기)
+    setMarkers((prev) => {
+        const oldIndex = prev.findIndex(m => m.id === activeId);
+        const newIndex = prev.findIndex(m => m.id === overId);
+        return arrayMove(prev, oldIndex, newIndex); // dnd-kit 유틸리티 사용
+    });
+
+    // 2. API Call (타겟의 sortOrder를 알아내서 보냄)
+    const targetMarker = markers.find(m => m.id === overId);
+    if(targetMarker) {
+       await api.patch(`/api/markers/${activeId}/move`, { newOrder: targetMarker.sortOrder });
+    }
+};
   // 3. 마커 삭제
   const deleteMarker = async (id: string) => {
     await api.delete(`/api/markers/${id}`);
@@ -118,7 +139,7 @@ export function MarkerProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <MarkerContext.Provider value={{ markers, isLoading, createMarker, deleteMarker, addLink, deleteLink }}>
+    <MarkerContext.Provider value={{ markers, isLoading, createMarker, moveMarker, deleteMarker, addLink, deleteLink }}>
       {children}
     </MarkerContext.Provider>
   );

@@ -86,19 +86,29 @@ export function MarkerProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const moveMarker = async (activeId: string, overId: string) => {
-    // 1. Optimistic Update (화면 먼저 바꾸기)
+const moveMarker = async (activeId: string, overId: string) => {
+    const oldIndex = markers.findIndex((m) => m.id === activeId);
+    const newIndex = markers.findIndex((m) => m.id === overId);
+
+    if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
+
+    const targetOrder = markers[newIndex].sortOrder;
+
     setMarkers((prev) => {
-        const oldIndex = prev.findIndex(m => m.id === activeId);
-        const newIndex = prev.findIndex(m => m.id === overId);
-        return arrayMove(prev, oldIndex, newIndex); // dnd-kit 유틸리티 사용
+      const sortedArray = arrayMove(prev, oldIndex, newIndex);
+
+      return sortedArray.map((marker, index) => ({
+        ...marker,
+        sortOrder: index + 1, 
+      }));
     });
 
-    const targetMarker = markers.find(m => m.id === overId);
-    if(targetMarker) {
-       await api.patch(`/api/markers/${activeId}/move`, { newOrder: targetMarker.sortOrder });
+    try {
+      await api.patch(`/api/markers/${activeId}/move`, { newOrder: targetOrder });
+    } catch (error) {
+      console.error("이동 실패:", error);
     }
-};
+  };
   // 3. 마커 삭제
   const deleteMarker = async (id: string) => {
     await api.delete(`/api/markers/${id}`);

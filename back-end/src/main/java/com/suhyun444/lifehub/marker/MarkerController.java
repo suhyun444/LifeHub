@@ -74,7 +74,7 @@ public class MarkerController {
                 throw new IllegalArgumentException("'newOrder' 값이 없습니다!");
             }
 
-            markerService.moveMarker(email, markerId, newOrder);
+            //markerService.moveMarker(email, markerId, newOrder);
             
             return ResponseEntity.ok().build();
 

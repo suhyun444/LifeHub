@@ -94,7 +94,6 @@ export function MarkerProvider({ children }: { children: ReactNode }) {
         return arrayMove(prev, oldIndex, newIndex); // dnd-kit 유틸리티 사용
     });
 
-    // 2. API Call (타겟의 sortOrder를 알아내서 보냄)
     const targetMarker = markers.find(m => m.id === overId);
     if(targetMarker) {
        await api.patch(`/api/markers/${activeId}/move`, { newOrder: targetMarker.sortOrder });

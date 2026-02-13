@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Plus, BookMarked, Trash2, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import { useMarkers } from "@/lib/marker-context";
+import { useRouter } from "next/navigation";
 
 // ★ dnd-kit 관련 라이브러리 추가
 import {
@@ -35,7 +36,7 @@ interface Marker {
 
 // ★ [분리됨] 드래그 가능한 개별 마커 컴포넌트
 function SortableMarker({ marker, onDelete }: { marker: Marker, onDelete: (id: string) => void }) {
-  // useSortable 훅을 통해 드래그 기능 주입
+  const router = useRouter(); // ★ 페이지 이동을 위한 훅
   const {
     attributes,
     listeners,
@@ -52,50 +53,54 @@ function SortableMarker({ marker, onDelete }: { marker: Marker, onDelete: (id: s
     zIndex: isDragging ? 50 : "auto", // 드래그 중인 놈을 맨 위로
     opacity: isDragging ? 0.8 : 1,    // 드래그 중엔 약간 투명하게
   };
+  const goToDetail = () => {
+    // 드래그 중이라면 이동하지 않음 (중요!)
+    if (isDragging) return;
+    router.push(`/marker/game?id=${marker.id}&title=${encodeURIComponent(marker.title)}&color=${marker.color}`);
+  };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="touch-none">
-      <Link
-        href={`/marker/game?id=${marker.id}&title=${encodeURIComponent(marker.title)}&color=${marker.color}`}
-        // ★ 중요: 드래그 중이면 링크 이동 방지
-        draggable={false}
-        onClick={(e) => {
-          if (isDragging) e.preventDefault();
-        }}
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      // ★ Link 태그 대신 div에 클릭 이벤트 연결
+      onClick={goToDetail}
+      className="touch-none cursor-pointer" // cursor-pointer 중요
+    >
+      <motion.div
+        whileHover={{ y: -5, scale: 1.02 }}
+        // 드래그 중일 때는 확대 효과 끄거나 고정 (선택사항)
+        animate={isDragging ? { scale: 1.05, y: 0 } : {}}
+        className={`relative h-44 rounded-2xl p-6 flex flex-col justify-between shadow-xl cursor-grab active:cursor-grabbing group overflow-hidden select-none ${marker.color}`}
       >
-        <motion.div
-          whileHover={{ y: -5, scale: 1.02 }}
-          // 드래그 중일 때는 확대 효과 끄거나 고정 (선택사항)
-          animate={isDragging ? { scale: 1.05, y: 0 } : {}}
-          className={`relative h-44 rounded-2xl p-6 flex flex-col justify-between shadow-xl cursor-grab active:cursor-grabbing group overflow-hidden select-none ${marker.color}`}
-        >
-          {/* 배경 데코레이션 */}
-          <MapPin className="absolute -right-4 -bottom-4 text-white opacity-20 rotate-12" size={100} />
+        {/* 배경 데코레이션 */}
+        <MapPin className="absolute -right-4 -bottom-4 text-white opacity-20 rotate-12" size={100} />
 
-          <div className="z-10">
-            <h2 className="text-2xl font-bold truncate tracking-tight">{marker.title}</h2>
-            <p className="text-white/60 text-xs mt-1 font-mono uppercase">ID: {marker.id.slice(-4)}</p>
-          </div>
+        <div className="z-10">
+          <h2 className="text-2xl font-bold truncate tracking-tight">{marker.title}</h2>
+          <p className="text-white/60 text-xs mt-1 font-mono uppercase">ID: {marker.id.slice(-4)}</p>
+        </div>
 
-          <div className="z-10 flex justify-between items-center mt-4">
-            <span className="text-[10px] font-bold bg-black/20 px-3 py-1.5 rounded-full backdrop-blur-md group-hover:bg-black/30 transition-colors">
-              OPEN GAME
-            </span>
-            <button
-              onClick={(e) => {
-                e.preventDefault(); // 링크 이동 막기
-                e.stopPropagation(); // 상위 이벤트 전파 막기
-                if (confirm("삭제하시겠습니까?")) onDelete(marker.id);
-              }}
-              // 드래그 이벤트가 버튼 클릭을 방해하지 않도록 설정
-              onPointerDown={(e) => e.stopPropagation()}
-              className="p-2 text-white/50 hover:text-white hover:bg-white/20 rounded-full transition-all"
-            >
-              <Trash2 size={16} />
-            </button>
-          </div>
-        </motion.div>
-      </Link>
+        <div className="z-10 flex justify-between items-center mt-4">
+          <span className="text-[10px] font-bold bg-black/20 px-3 py-1.5 rounded-full backdrop-blur-md group-hover:bg-black/30 transition-colors">
+            OPEN GAME
+          </span>
+          <button
+            onClick={(e) => {
+              e.preventDefault(); // 링크 이동 막기
+              e.stopPropagation(); // 상위 이벤트 전파 막기
+              if (confirm("삭제하시겠습니까?")) onDelete(marker.id);
+            }}
+            // 드래그 이벤트가 버튼 클릭을 방해하지 않도록 설정
+            onPointerDown={(e) => e.stopPropagation()}
+            className="p-2 text-white/50 hover:text-white hover:bg-white/20 rounded-full transition-all"
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
+      </motion.div>
     </div>
   );
 }

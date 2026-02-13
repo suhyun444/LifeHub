@@ -14,8 +14,22 @@ const LoginSuccessHandler = () => {
       // 2. 토큰을 localStorage에 저장합니다.
       localStorage.setItem('accessToken', token);
 
-      window.location.href = '/';
-    } else {
+      const getCookie = (name: string) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop()?.split(";").shift();
+      };
+      const returnUrl = getCookie("returnUrl");
+      document.cookie = "returnUrl=; path=/; max-age=0";
+
+      if (returnUrl) {
+        router.push(returnUrl);
+      } else {
+        router.push("/");
+        window.history.replaceState({}, document.title, "/");
+      }
+    } 
+    else {
       console.error('No token found in URL.');
       window.location.href = "/oauth2/authorization/google";
     }

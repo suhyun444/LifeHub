@@ -1,5 +1,10 @@
 const API_BASE_URL = 'https://suhyun444.duckdns.org';
 
+const redirectToLogin = () => {
+  document.cookie = `returnUrl=${window.location.pathname}; path=/; max-age=300`;
+  window.location.href = `${API_BASE_URL}/oauth2/authorization/google`;
+};
+
 const request = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('accessToken');
   const headers = new Headers(options.headers);
@@ -12,21 +17,28 @@ const request = async (url: string, options: RequestInit = {}) => {
     headers.set('Authorization', `Bearer ${token}`);
   }
 
-  const response = await fetch(API_BASE_URL + url, {
-    ...options,
-    headers,
-  });
+  try{
 
-  if (!response.ok) {
-    if (response.status === 401) {
-      localStorage.removeItem('accessToken');
-      window.location.href = 'https://suhyun444.duckdns.org/oauth2/authorization/google'; 
-      throw new Error('UnAuthorized');
+    const response = await fetch(API_BASE_URL + url, {
+      ...options,
+      headers,
+    });
+    
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error('UnAuthorized');
+      }
+      throw new Error('API request failed');
     }
-    throw new Error('API request failed');
+    return response.json();
+  }
+  catch (error)
+  {
+    localStorage.removeItem('accessToken');
+    redirectToLogin()
+    console.error()
   }
 
-  return response.json();
 };
 
 export const api = {

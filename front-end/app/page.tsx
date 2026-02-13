@@ -5,33 +5,30 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Plus, X, CreditCard, Server, Clock, 
-  Activity, Zap, LayoutGrid, Terminal, Github
+  Activity, LayoutGrid, Terminal, Github, MapPin, Navigation
 } from "lucide-react";
 
 // --- 1. 타입 및 설정 정의 ---
-// icon: 1x1 (앱 아이콘)
-// small: 2x1 (가로형 버튼)
-// medium: 2x2 (정사각형 위젯)
-// wide: 4x2 (와이드 패널)
 type WidgetSize = "icon" | "small" | "medium" | "wide"; 
-type WidgetType = "finance" | "server" | "clock" | "link";
+// marker 타입 추가
+type WidgetType = "finance" | "server" | "clock" | "link" | "marker";
 
 interface WidgetItem {
   id: string;
   type: WidgetType;
   size: WidgetSize;
-  data?: any; // 추가 데이터 (링크 주소 등)
 }
 
 // --- 2. 위젯 렌더링 컴포넌트 ---
 const WidgetContent = ({ type, size }: { type: WidgetType, size: WidgetSize }) => {
-  // 1x1 아이콘 모드일 때
+  // 1x1 아이콘 모드일 때 (작은 아이콘)
   if (size === "icon") {
     switch (type) {
       case "finance": return <div className="flex justify-center items-center h-full bg-blue-500 text-white"><CreditCard size={24}/></div>;
       case "server": return <div className="flex justify-center items-center h-full bg-slate-800 text-green-400"><Terminal size={24}/></div>;
       case "clock": return <div className="flex justify-center items-center h-full bg-indigo-500 text-white"><Clock size={24}/></div>;
-      case "link": return <div className="flex justify-center items-center h-full bg-white text-slate-800 border-2 border-slate-100"><Github size={28}/></div>;
+      case "link": return <div className="flex justify-center items-center h-full bg-black text-white"><Github size={28}/></div>;
+      case "marker": return <div className="flex justify-center items-center h-full bg-orange-500 text-white"><MapPin size={24}/></div>;
     }
   }
 
@@ -64,7 +61,6 @@ const WidgetContent = ({ type, size }: { type: WidgetType, size: WidgetSize }) =
              </div>
              <div className="w-full bg-slate-700 h-1 rounded-full"><div className="bg-green-500 w-[12%] h-full rounded-full"></div></div>
              
-             {/* 큰 위젯일 때만 RAM 정보 표시 */}
              {size !== "small" && (
                <>
                  <div className="flex justify-between text-[10px] text-slate-400 mt-1">
@@ -74,7 +70,6 @@ const WidgetContent = ({ type, size }: { type: WidgetType, size: WidgetSize }) =
                </>
              )}
           </div>
-          {/* 배경 장식 */}
           <div className="absolute -right-4 -bottom-4 text-slate-800 opacity-50"><Server size={80} /></div>
         </div>
       );
@@ -88,9 +83,24 @@ const WidgetContent = ({ type, size }: { type: WidgetType, size: WidgetSize }) =
       );
     case "link":
       return (
-        <Link href="https://github.com/suhyun444" target="_blank" className="flex flex-col h-full justify-center items-center bg-slate-950 text-white p-4 group hover:bg-black transition-colors">
+        <Link href="https://github.com/suhyun444/LifeHub" target="_blank" className="flex flex-col h-full justify-center items-center bg-slate-950 text-white p-4 group hover:bg-black transition-colors">
           <Github size={32} className="group-hover:scale-110 transition-transform"/>
-          <span className="text-xs font-bold mt-2">GitHub</span>
+          <span className="text-xs font-bold mt-2">LifeHub Repo</span>
+        </Link>
+      );
+    case "marker":
+      return (
+        <Link href="/Marker" className="flex flex-col h-full justify-between p-4 bg-orange-500 text-white hover:bg-orange-600 transition-colors relative overflow-hidden">
+          <div className="flex justify-between items-start z-10">
+             <div className="p-1.5 bg-white/20 rounded-md"><MapPin size={18}/></div>
+             <div className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-medium">Maps</div>
+          </div>
+          <div className="z-10">
+            <div className="text-lg font-bold">My Locations</div>
+            <div className="text-[10px] opacity-80">지도 및 마커 관리</div>
+          </div>
+          {/* 배경 데코레이션 */}
+          <div className="absolute -right-2 -bottom-2 text-orange-700/30 rotate-12"><Navigation size={64}/></div>
         </Link>
       );
     default:
@@ -99,18 +109,17 @@ const WidgetContent = ({ type, size }: { type: WidgetType, size: WidgetSize }) =
 };
 
 export default function Dashboard() {
-  // 초기 상태: 다양한 크기의 위젯 배치
+  // 초기 상태: 요청하신 5가지 핵심 위젯 배치
   const [widgets, setWidgets] = useState<WidgetItem[]>([
-    { id: "1", type: "server", size: "medium" }, // 2x2
-    { id: "2", type: "finance", size: "wide" },   // 4x2
-    { id: "3", type: "clock", size: "small" },    // 2x1
-    { id: "4", type: "link", size: "icon" },      // 1x1
-    { id: "5", type: "finance", size: "icon" },   // 1x1
+    { id: "1", type: "server", size: "medium" },  // 2x2: 서버 상태
+    { id: "2", type: "finance", size: "wide" },   // 4x2: 카드/지출
+    { id: "3", type: "clock", size: "small" },    // 2x1: 시계
+    { id: "4", type: "marker", size: "small" },   // 2x1: 마커 (New!)
+    { id: "5", type: "link", size: "icon" },      // 1x1: 깃허브
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 위젯 추가
   const addWidget = (type: WidgetType, size: WidgetSize) => {
     const newWidget: WidgetItem = {
       id: Math.random().toString(36).substr(2, 9),
@@ -121,13 +130,11 @@ export default function Dashboard() {
     setIsModalOpen(false);
   };
 
-  // 위젯 삭제
   const removeWidget = (id: string) => {
     setWidgets(widgets.filter((w) => w.id !== id));
   };
 
-  // ★ 그리드 클래스 매핑 (핵심 로직)
-  // 6열 그리드 기준: col-span-1 = 1칸, col-span-2 = 2칸...
+  // 그리드 클래스 매핑
   const getSizeClass = (size: WidgetSize) => {
     switch (size) {
       case "icon":   return "col-span-1 row-span-1"; // 1x1
@@ -155,11 +162,7 @@ export default function Dashboard() {
           </button>
         </header>
 
-        {/* ★ High Density Grid Layout 
-          모바일: 3열 / PC: 6열
-          높이: 100px로 고정 (촘촘함)
-          gap: 12px (깔끔함)
-        */}
+        {/* 그리드 레이아웃 */}
         <div className="grid grid-cols-3 md:grid-cols-6 auto-rows-[100px] gap-3 grid-flow-dense">
           
           <AnimatePresence>
@@ -173,7 +176,6 @@ export default function Dashboard() {
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 className={`relative group rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-slate-200/50 ${getSizeClass(widget.size)}`}
               >
-                {/* 삭제 버튼 (우측 상단, 호버 시 노출) */}
                 <button
                   onClick={() => removeWidget(widget.id)}
                   className="absolute top-2 right-2 z-20 p-1 bg-black/50 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500 hover:scale-110"
@@ -181,13 +183,11 @@ export default function Dashboard() {
                   <X size={12} />
                 </button>
                 
-                {/* 위젯 렌더링 */}
                 <WidgetContent type={widget.type} size={widget.size} />
               </motion.div>
             ))}
           </AnimatePresence>
 
-          {/* 빈 공간 추가 버튼 */}
           <motion.button
             layout
             onClick={() => setIsModalOpen(true)}
@@ -221,39 +221,33 @@ export default function Dashboard() {
               </div>
 
               <div className="space-y-8">
-                {/* 섹션 1: 시스템 */}
+                {/* 섹션 1: 핵심 기능 */}
                 <section>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 ml-1">System & Monitoring</h3>
+                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 ml-1">Core Features</h3>
                   <div className="flex gap-3 overflow-x-auto pb-2">
-                    <button onClick={() => addWidget("server", "icon")} className="flex-none w-20 h-20 bg-slate-800 rounded-xl flex items-center justify-center text-green-400 hover:scale-105 transition-transform"><Terminal size={24}/></button>
+                     {/* Marker 추가 버튼 */}
+                    <button onClick={() => addWidget("marker", "small")} className="flex-none w-40 h-20 bg-orange-500 rounded-xl p-3 text-left text-white hover:scale-105 transition-transform shadow-lg shadow-orange-500/30">
+                       <MapPin size={20} className="mb-1"/>
+                       <div className="font-bold">Markers</div>
+                       <div className="text-[10px] opacity-80">Location Manager</div>
+                    </button>
+                    {/* Finance 추가 버튼 */}
+                    <button onClick={() => addWidget("finance", "wide")} className="flex-none w-80 h-40 bg-white border border-slate-200 rounded-xl p-4 text-left hover:scale-105 transition-transform shadow-sm">
+                      <div className="flex justify-between mb-8"><CreditCard className="text-blue-500"/><span className="text-xs bg-slate-100 px-2 py-1 rounded">Card</span></div>
+                      <div className="text-2xl font-bold">Finance</div>
+                    </button>
+                  </div>
+                </section>
+
+                {/* 섹션 2: 시스템 및 유틸리티 */}
+                <section>
+                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 ml-1">System & Utils</h3>
+                  <div className="flex gap-3 overflow-x-auto pb-2">
                     <button onClick={() => addWidget("server", "medium")} className="flex-none w-40 h-40 bg-slate-900 rounded-xl p-4 text-left text-white hover:scale-105 transition-transform shadow-lg">
                       <Activity size={20} className="mb-2 text-green-400"/>
-                      <div className="text-xs text-slate-400">Server Status</div>
-                      <div className="font-bold">Online</div>
+                      <div className="text-xs text-slate-400">System</div>
+                      <div className="font-bold">Server</div>
                     </button>
-                  </div>
-                </section>
-
-                {/* 섹션 2: 금융 */}
-                <section>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 ml-1">Finance</h3>
-                  <div className="flex gap-3 overflow-x-auto pb-2">
-                    <button onClick={() => addWidget("finance", "icon")} className="flex-none w-20 h-20 bg-blue-500 rounded-xl flex items-center justify-center text-white hover:scale-105 transition-transform shadow-lg shadow-blue-500/30"><CreditCard size={24}/></button>
-                    <button onClick={() => addWidget("finance", "small")} className="flex-none w-40 h-20 bg-white border border-slate-200 rounded-xl p-3 text-left hover:scale-105 transition-transform">
-                      <div className="text-[10px] text-slate-400">Total</div>
-                      <div className="font-bold text-slate-800">₩ 450k</div>
-                    </button>
-                    <button onClick={() => addWidget("finance", "wide")} className="flex-none w-80 h-40 bg-white border border-slate-200 rounded-xl p-4 text-left hover:scale-105 transition-transform shadow-sm">
-                      <div className="flex justify-between mb-8"><CreditCard className="text-blue-500"/><span className="text-xs bg-slate-100 px-2 py-1 rounded">Analysis</span></div>
-                      <div className="text-2xl font-bold">₩ 450,200</div>
-                    </button>
-                  </div>
-                </section>
-
-                {/* 섹션 3: 유틸리티 */}
-                <section>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 ml-1">Utilities</h3>
-                  <div className="flex gap-3 overflow-x-auto pb-2">
                     <button onClick={() => addWidget("clock", "small")} className="flex-none w-40 h-20 bg-indigo-500 text-white rounded-xl flex items-center justify-center font-mono font-bold text-xl hover:scale-105 transition-transform shadow-lg shadow-indigo-500/30">19:35</button>
                     <button onClick={() => addWidget("link", "icon")} className="flex-none w-20 h-20 bg-black text-white rounded-xl flex items-center justify-center hover:scale-105 transition-transform"><Github size={24}/></button>
                   </div>

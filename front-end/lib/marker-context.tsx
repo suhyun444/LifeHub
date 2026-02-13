@@ -57,8 +57,9 @@ export function MarkerProvider({ children }: { children: ReactNode }) {
         setMarkers(formatted);
       } catch (e: any) {
         console.error("인증 실패 또는 데이터 로딩 실패:", e);
-        
-        window.location.href = "https://suhyun444.duckdns.org/oauth2/authorization/google";
+
+        //document.cookie = `returnUrl=${pathname}; path=/; max-age=300`;
+        //window.location.href = "https://suhyun444.duckdns.org/oauth2/authorization/google";
       } finally {
         setIsLoading(false);
       }

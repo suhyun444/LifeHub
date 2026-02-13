@@ -59,7 +59,7 @@ public class MarkerController {
         return ResponseEntity.ok(Map.of("message","Success to delete"));
     }
     @PatchMapping("api/markers/{markerId}/move")
-    public ResponseEntity<Void> moveMarker(@AuthenticationPrincipal String email,@PathVariable Long markerId, @RequestBody Map<String, Long> request) {
+    public ResponseEntity<?> moveMarker(@AuthenticationPrincipal String email,@PathVariable Long markerId, @RequestBody Map<String, Long> request) {
         // markerService.moveMarker(email,markerId, request.get("newOrder"));
         // return ResponseEntity.ok().build();try {
         try {
@@ -82,7 +82,7 @@ public class MarkerController {
 
             System.out.println("### 컨트롤러 에러 발생 ###");
             e.printStackTrace(); 
-            throw e;
+            return ResponseEntity.badRequest().body(Map.of("message","Success to delete"));
         }
     }
 }

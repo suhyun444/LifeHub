@@ -81,7 +81,7 @@ public class MarkerService {
         linkRepository.deleteById(linkId);
     }
     @Transactional
-    public void moveMarker(String email, Long markerId, Long newOrder) {
+    public void moveMarker(String email, Long markerId, Long newOrder) throws Exception{
         User user = userRepository.findByEmail(email).orElseThrow();
         Marker marker = markerRepository.findById(markerId)
                 .orElseThrow(() -> new IllegalArgumentException("Marker not found"));

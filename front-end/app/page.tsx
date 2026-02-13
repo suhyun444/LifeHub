@@ -115,7 +115,7 @@ export default function Dashboard() {
     { id: "2", type: "finance", size: "wide" },   // 4x2: 카드/지출
     { id: "3", type: "clock", size: "small" },    // 2x1: 시계
     { id: "4", type: "marker", size: "small" },   // 2x1: 마커 (New!)
-    { id: "5", type: "link", size: "icon" },      // 1x1: 깃허브
+    { id: "5", type: "link", size: "small" },      // 1x1: 깃허브
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);

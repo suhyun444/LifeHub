@@ -90,14 +90,14 @@ const WidgetContent = ({ type, size }: { type: WidgetType, size: WidgetSize }) =
       );
     case "marker":
       return (
-        <Link href="/Marker" className="flex flex-col h-full justify-between p-4 bg-orange-500 text-white hover:bg-orange-600 transition-colors relative overflow-hidden">
+        <Link href="/marker" className="flex flex-col h-full justify-between p-4 bg-orange-500 text-white hover:bg-orange-600 transition-colors relative overflow-hidden">
           <div className="flex justify-between items-start z-10">
              <div className="p-1.5 bg-white/20 rounded-md"><MapPin size={18}/></div>
-             <div className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-medium">Maps</div>
+             <div className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-medium">Maker</div>
           </div>
           <div className="z-10">
-            <div className="text-lg font-bold">My Locations</div>
-            <div className="text-[10px] opacity-80">지도 및 마커 관리</div>
+            <div className="text-lg font-bold">My Markers</div>
+            <div className="text-[10px] opacity-80">URL 마커 관리</div>
           </div>
           {/* 배경 데코레이션 */}
           <div className="absolute -right-2 -bottom-2 text-orange-700/30 rotate-12"><Navigation size={64}/></div>

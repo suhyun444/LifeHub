@@ -68,7 +68,6 @@ function SortableMarker({ marker, onDelete }: { marker: Marker, onDelete: (id: s
 
         <div className="z-10">
           <h2 className="text-2xl font-bold truncate tracking-tight">{marker.title}</h2>
-          <p className="text-white/60 text-xs mt-1 font-mono uppercase">ID: {String(marker.id).slice(-4)}</p>
         </div>
 
         <div className="z-10 flex justify-between items-center mt-4">

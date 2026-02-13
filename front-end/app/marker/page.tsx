@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation"; // 페이지 이동용
 import { Plus, BookMarked, Trash2, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
-import { useMarkers, Marker } from "@/lib/marker-context"; // Marker 타입 import 필요
+import { useMarkers, Marker } from "@/lib/marker-context";
 
-// ★ dnd-kit 라이브러리
+// dnd-kit 라이브러리
 import {
   DndContext,
   closestCenter,
@@ -21,15 +21,13 @@ import {
   sortableKeyboardCoordinates,
   useSortable,
   rectSortingStrategy,
-  arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-// ★ [분리된 컴포넌트] 드래그 가능한 마커 (Link 대신 div 사용)
+// ★ [수정된 컴포넌트] Link 태그 제거됨!
 function SortableMarker({ marker, onDelete }: { marker: Marker, onDelete: (id: string) => void }) {
   const router = useRouter();
   
-  // ID를 무조건 문자열로 변환해서 전달 (중요!)
   const {
     attributes,
     listeners,
@@ -46,7 +44,7 @@ function SortableMarker({ marker, onDelete }: { marker: Marker, onDelete: (id: s
     opacity: isDragging ? 0.8 : 1,
   };
 
-  // 상세 페이지 이동 함수
+  // 클릭 시 상세 페이지 이동
   const goToDetail = () => {
     if (isDragging) return; // 드래그 중이면 이동 X
     router.push(`/marker/game?id=${marker.id}&title=${encodeURIComponent(marker.title)}&color=${marker.color}`);
@@ -58,8 +56,8 @@ function SortableMarker({ marker, onDelete }: { marker: Marker, onDelete: (id: s
       style={style}
       {...attributes}
       {...listeners}
-      onClick={goToDetail} // Link 대신 클릭 이벤트 사용
-      className="touch-none cursor-pointer" // 터치 이벤트 방지 및 커서 설정
+      onClick={goToDetail} // ★ Link 대신 div에 onClick 사용
+      className="touch-none cursor-pointer" 
     >
       <motion.div
         whileHover={{ y: -5, scale: 1.02 }}
@@ -93,14 +91,13 @@ function SortableMarker({ marker, onDelete }: { marker: Marker, onDelete: (id: s
   );
 }
 
-// ★ 메인 페이지 컴포넌트
+// 메인 페이지 컴포넌트
 export default function Page() {
   const { markers, isLoading, createMarker, deleteMarker, moveMarker } = useMarkers();
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTitle, setNewTitle] = useState("");
 
-  // ★ 센서 설정: 8px 이상 움직여야 드래그로 인식
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -116,7 +113,6 @@ export default function Page() {
     const { active, over } = event;
     
     if (over && active.id !== over.id) {
-      // ID를 문자열로 확실하게 변환해서 전달
       await moveMarker(String(active.id), String(over.id));
     }
   };
@@ -152,13 +148,11 @@ export default function Page() {
           </button>
         </header>
 
-        {/* ★ DndContext 시작 */}
         <DndContext 
           sensors={sensors} 
           collisionDetection={closestCenter} 
           onDragEnd={handleDragEnd}
         >
-          {/* items에 ID 문자열 배열 전달 */}
           <SortableContext items={markers.map(m => String(m.id))} strategy={rectSortingStrategy}>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
               {markers.map((marker) => (
@@ -183,7 +177,6 @@ export default function Page() {
         </DndContext>
       </div>
 
-      {/* 모달 */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <motion.div 

@@ -20,7 +20,7 @@ const request = async (url: string, options: RequestInit = {}) => {
   if (!response.ok) {
     if (response.status === 401) {
       localStorage.removeItem('accessToken');
-      window.location.href = '/oauth2/authorization/google'; 
+      window.location.href = 'https://suhyun444.duckdns.org/oauth2/authorization/google'; 
       throw new Error('UnAuthorized');
     }
     throw new Error('API request failed');

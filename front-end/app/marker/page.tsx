@@ -58,6 +58,7 @@ function SortableMarker({ marker, onDelete }: { marker: Marker, onDelete: (id: s
       <Link
         href={`/marker/game?id=${marker.id}&title=${encodeURIComponent(marker.title)}&color=${marker.color}`}
         // ★ 중요: 드래그 중이면 링크 이동 방지
+        draggable={false}
         onClick={(e) => {
           if (isDragging) e.preventDefault();
         }}
@@ -66,7 +67,7 @@ function SortableMarker({ marker, onDelete }: { marker: Marker, onDelete: (id: s
           whileHover={{ y: -5, scale: 1.02 }}
           // 드래그 중일 때는 확대 효과 끄거나 고정 (선택사항)
           animate={isDragging ? { scale: 1.05, y: 0 } : {}}
-          className={`relative h-44 rounded-2xl p-6 flex flex-col justify-between shadow-xl cursor-grab active:cursor-grabbing group overflow-hidden ${marker.color}`}
+          className={`relative h-44 rounded-2xl p-6 flex flex-col justify-between shadow-xl cursor-grab active:cursor-grabbing group overflow-hidden select-none ${marker.color}`}
         >
           {/* 배경 데코레이션 */}
           <MapPin className="absolute -right-4 -bottom-4 text-white opacity-20 rotate-12" size={100} />

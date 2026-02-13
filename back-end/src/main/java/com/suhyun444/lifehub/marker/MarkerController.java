@@ -60,29 +60,7 @@ public class MarkerController {
     }
     @PatchMapping("api/markers/{markerId}/move")
     public ResponseEntity<?> moveMarker(@AuthenticationPrincipal String email,@PathVariable Long markerId, @RequestBody Map<String, Long> request) {
-        // markerService.moveMarker(email,markerId, request.get("newOrder"));
-        // return ResponseEntity.ok().build();try {
-        try {
-            System.out.println("DEBUG: moveMarker 호출됨");
-            System.out.println("DEBUG: markerId = " + markerId);
-            System.out.println("DEBUG: request map = " + request);
-
-            Long newOrder = request.get("newOrder");
-            System.out.println("DEBUG: newOrder 값 = " + newOrder);
-
-            if (newOrder == null) {
-                throw new IllegalArgumentException("'newOrder' 값이 없습니다!");
-            }
-
-            markerService.moveMarker(email, markerId, newOrder);
-            
-            return ResponseEntity.ok().build();
-
-        } catch (Exception e) {
-
-            System.out.println("### 컨트롤러 에러 발생 ###");
-            e.printStackTrace(); 
-            return ResponseEntity.badRequest().body(Map.of("message","Success to delete"));
-        }
+        markerService.moveMarker(email,markerId, request.get("newOrder"));
+        return ResponseEntity.ok().build();
     }
 }

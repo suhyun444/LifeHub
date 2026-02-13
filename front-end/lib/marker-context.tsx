@@ -99,7 +99,7 @@ const moveMarker = async (activeId: string, overId: string) => {
 
       return sortedArray.map((marker, index) => ({
         ...marker,
-        sortOrder: index + 1, 
+        sortOrder: sortedArray.length - index, 
       }));
     });
 

@@ -16,15 +16,27 @@ import com.suhyun444.lifehub.card.Entity.User;
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>
 {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
+
+    public CustomOAuth2UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setDelegate(OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate) {
+        this.delegate = delegate;
+    }
     
     @Override
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException
     {
-        OAuth2User oAuth2User = new DefaultOAuth2UserService().loadUser(request);
-
+        OAuth2User oAuth2User = delegate.loadUser(request);
         String email = oAuth2User.getAttribute("email");
+        
+        if (email == null) {
+            throw new OAuth2AuthenticationException("Email not found from OAuth2 provider");
+        }
+        
         User user = userRepository.findByEmail(email).orElseGet(() -> userRepository.save(new User(email)));
         return new CustomOAuth2User(
             Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),

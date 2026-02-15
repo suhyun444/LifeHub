@@ -16,7 +16,7 @@ public class TransactionCategorizer {
     }
     public String getCategory(String merchant,Optional<String> databaseResult)
     {
-        String result = null;
+        String result = databaseResult.orElse(null);
         if(!databaseResult.isPresent()) result = getFromKeyword(merchant);
         if(result == null) return "기타";
         return result;

@@ -29,7 +29,7 @@ public class KookminTransactionParser extends TransactionParser {
             transaction.setPaymentMethod(dataFormatter.formatCellValue(row.getCell(7)));
             
             String transactionKey = transaction.getDate()+"_"+transaction.getAmount()+"_"+transaction.getMerchant();
-            transactionKey.replaceAll("\\s+","");
+            transactionKey = transactionKey.replaceAll("\\s+","");
             transaction.setTransactionKey(transactionKey);
 
             transactions.add(transaction);

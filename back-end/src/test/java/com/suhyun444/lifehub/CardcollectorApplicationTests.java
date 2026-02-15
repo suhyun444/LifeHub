@@ -1,3 +1,4 @@
+package com.suhyun444.lifehub;
 // package com.suhyun444.lifehub;
 
 // import org.junit.jupiter.api.Test;

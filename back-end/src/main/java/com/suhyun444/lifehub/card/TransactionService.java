@@ -75,7 +75,7 @@ public class TransactionService {
             User user = userRepository.findByEmail(email).orElseThrow();
             
             importTransactions(transactions,user);
-            List<TransactionDto> result = transactionRepository.findById(user.getId()).stream().map(TransactionDto::from).collect(Collectors.toList());
+            List<TransactionDto> result = transactionRepository.findByUserIdAndIsDeletedFalse(user.getId()).stream().map(TransactionDto::from).collect(Collectors.toList());
             return result;
         }
     }

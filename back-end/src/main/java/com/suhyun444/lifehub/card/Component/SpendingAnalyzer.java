@@ -24,9 +24,14 @@ public class SpendingAnalyzer {
     private String groqApiKey;
 
     private final ObjectMapper objectMapper;
-    private final RestClient restClient = RestClient.builder()
-            .baseUrl("https://api.groq.com/openai/v1")
-            .build();
+    private final RestClient restClient;
+
+    public SpendingAnalyzer(ObjectMapper objectMapper, RestClient.Builder restClientBuilder) {
+        this.objectMapper = objectMapper;
+        this.restClient = restClientBuilder
+                .baseUrl("https://api.groq.com/openai/v1")
+                .build();
+    }
 
     // 외부 의존성 없이 순수하게 Transaction 리스트만 받아서 분석 결과 리턴
     public AnalysisDto.Response analyze(List<TransactionDto> transactions, String month) {

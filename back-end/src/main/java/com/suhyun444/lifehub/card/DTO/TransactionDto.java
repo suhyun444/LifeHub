@@ -5,12 +5,14 @@ import com.suhyun444.lifehub.card.Entity.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransactionDto {
-    private String id;
+    private Long id;
     private String date;
     private String merchant;
     private int amount;
@@ -20,7 +22,7 @@ public class TransactionDto {
     private String paymentMethod;
     public static TransactionDto from(Transaction transaction) {
         return new TransactionDto(
-            String.valueOf(transaction.getId()),
+            transaction.getId(),
             transaction.getDate(),
             transaction.getMerchant(),
             transaction.getAmount(),

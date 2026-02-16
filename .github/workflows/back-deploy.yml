@@ -23,10 +23,17 @@ jobs:
       - name: Gradle 권한 부여
         run: chmod +x ./back-end/gradlew
 
-      - name: Spring Boot 빌드 (테스트 제외)
+      - name: Spring Boot 테스트 및 빌드 (Test & Build)
         run: |
           cd back-end
-          ./gradlew build -x test
+          ./gradlew clean build jacocoTestReport
+
+      - name: 테스트 커버리지 리포트 업로드
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jacoco-report
+          path: back-end/build/reports/jacoco/test/html/
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2

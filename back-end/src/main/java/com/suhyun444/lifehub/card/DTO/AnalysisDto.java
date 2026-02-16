@@ -55,6 +55,7 @@ public class AnalysisDto {
     }
 
     @Data
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class BudgetHealth {
         private int score;

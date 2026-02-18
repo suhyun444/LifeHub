@@ -19,7 +19,7 @@ class JwtTokenProviderTest {
     private JwtTokenProvider jwtTokenProvider;
 
     private final String SECRET_KEY = "c29tZXJlYWxseWxvbmdzZWNyZXRrZXl0aGF0aXNzdWZmaWNpZW50bHlsb25nZm9yYWxnb3JpdGhtMTIzaHM1MTJzZWNyZXRrZXlmb3J0ZXN0aW5ncHVycG9zZXM=";
-    private final long VALIDITY_IN_MS = 3600000; // 1시간
+    private final long VALIDITY_IN_MS = 604800000; // 1주일
 
     @BeforeEach
     void setUp() {

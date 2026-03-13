@@ -137,7 +137,7 @@ export default function Dashboard() {
         
         <header className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-slate-800 tracking-tight">LifeHub OS</h1>
+            <h1 className="text-3xl font-bold text-slate-800 tracking-tight">LifeHub</h1>
             <p className="text-slate-500 text-sm">Design your own workflow.</p>
           </div>
           {/*<button 

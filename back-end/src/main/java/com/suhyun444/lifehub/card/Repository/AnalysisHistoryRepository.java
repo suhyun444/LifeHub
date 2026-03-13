@@ -17,6 +17,6 @@ import com.suhyun444.lifehub.card.Entity.Transaction;
 
 @Repository
 public interface AnalysisHistoryRepository extends JpaRepository<AnalysisHistory,Long>{
-    Optional<Map<AnalysisHistory>> findByUserId(Long userId);
+    Optional<List<AnalysisHistory>> findByUserId(Long userId);
     Optional<AnalysisHistory> findByUserIdAndMonth(Long userId, String month);
 }

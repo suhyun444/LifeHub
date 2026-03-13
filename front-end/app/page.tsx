@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -21,6 +21,16 @@ interface WidgetItem {
 
 // --- 2. 위젯 렌더링 컴포넌트 ---
 const WidgetContent = ({ type, size }: { type: WidgetType, size: WidgetSize }) => {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const hours = time.getHours().toString().padStart(2, '0');
+  const minutes = time.getMinutes().toString().padStart(2, '0');
+  const ampm = time.getHours() >= 12 ? 'PM' : 'AM';
   // 1x1 아이콘 모드일 때 (작은 아이콘)
   if (size === "icon") {
     switch (type) {
@@ -77,8 +87,12 @@ const WidgetContent = ({ type, size }: { type: WidgetType, size: WidgetSize }) =
       return (
         <div className="flex flex-col h-full justify-center items-center bg-indigo-600 text-white p-3 relative overflow-hidden">
           <div className="absolute top-2 left-3 text-[10px] opacity-60">SEOUL</div>
-          <div className="text-3xl font-bold font-mono tracking-tighter">19:34</div>
-          <div className="text-[10px] opacity-80 mt-1 font-medium bg-white/20 px-2 py-0.5 rounded-full">PM</div>
+          <div className="text-3xl font-bold font-mono tracking-tighter">
+            {`${hours}:${minutes}`}
+          </div>
+          <div className="text-[10px] opacity-80 mt-1 font-medium bg-white/20 px-2 py-0.5 rounded-full">
+            {ampm}
+          </div>
         </div>
       );
     case "link":
@@ -111,11 +125,10 @@ const WidgetContent = ({ type, size }: { type: WidgetType, size: WidgetSize }) =
 export default function Dashboard() {
   // 초기 상태: 요청하신 5가지 핵심 위젯 배치
   const [widgets, setWidgets] = useState<WidgetItem[]>([
-    { id: "1", type: "server", size: "medium" },  // 2x2: 서버 상태
-    { id: "2", type: "finance", size: "wide" },   // 4x2: 카드/지출
-    { id: "3", type: "clock", size: "small" },    // 2x1: 시계
-    { id: "4", type: "marker", size: "small" },   // 2x1: 마커 (New!)
-    { id: "5", type: "link", size: "small" },      // 1x1: 깃허브
+    { id: "1", type: "finance", size: "wide" },   // 4x2: 카드/지출
+    { id: "2", type: "clock", size: "small" },    // 2x1: 시계
+    { id: "3", type: "marker", size: "small" },   // 2x1: 마커 (New!)
+    { id: "4", type: "link", size: "small" },      // 1x1: 깃허브
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);

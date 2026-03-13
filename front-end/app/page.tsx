@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Plus, X, CreditCard,  Clock, 
+  Plus, X, CreditCard,  Clock, Bookmark,
   Activity, LayoutGrid, Terminal, Github, MapPin, Navigation
 } from "lucide-react";
 
@@ -51,8 +51,8 @@ const WidgetContent = ({ type, size }: { type: WidgetType, size: WidgetSize }) =
             {size !== "small" && <span className="text-[10px] font-bold text-slate-400 px-2 py-1 bg-slate-100 rounded-full">VISA</span>}
           </div>
           <div>
-            <div className="text-xl font-bold tracking-tight">₩ 450,200</div>
-            <div className="text-[10px] text-slate-500">이번 달 지출</div>
+            <div className="text-xl font-bold tracking-tight">Card Collector</div>
+            <div className="text-[10px] text-slate-500">카드 결제 내역 관리</div>
           </div>
         </Link>
       );
@@ -79,11 +79,11 @@ const WidgetContent = ({ type, size }: { type: WidgetType, size: WidgetSize }) =
       return (
         <Link href="/marker" className="flex flex-col h-full justify-between p-4 bg-orange-500 text-white hover:bg-orange-600 transition-colors relative overflow-hidden">
           <div className="flex justify-between items-start z-10">
-             <div className="p-1.5 bg-white/20 rounded-md"><MapPin size={18}/></div>
+             <div className="p-1.5 bg-white/20 rounded-md"><Bookmark size={18}/></div>
              <div className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-medium">Maker</div>
           </div>
           <div className="z-10">
-            <div className="text-lg font-bold">My Markers</div>
+            <div className="text-lg font-bold">Markers</div>
             <div className="text-[10px] opacity-80">URL 마커 관리</div>
           </div>
           {/* 배경 데코레이션 */}

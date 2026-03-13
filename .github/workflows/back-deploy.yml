@@ -65,6 +65,12 @@ jobs:
           color: 0xff0000
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+      - name: 🚨 Notify OpenClaw on Failure
+        if: failure()
+        run: |
+          curl -X POST "https://suhyun444.duckdns.org/webhook/hooks/github-ci" \
+          -H "Content-Type: application/json" \
+          -d '{"run_id": "${{ github.run_id }}"}'
 
   deploy-to-pi:
     needs: build-and-push  
@@ -96,3 +102,9 @@ jobs:
           color: ${{ job.status == 'success' && 0x008000 || 0xff0000 }}
           username: GitHub Actions
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+      - name: 🚨 Notify OpenClaw on Failure
+        if: failure()
+        run: |
+          curl -X POST "https://suhyun444.duckdns.org/webhook/hooks/github-ci" \
+          -H "Content-Type: application/json" \
+          -d '{"run_id": "${{ github.run_id }}"}'

@@ -70,11 +70,11 @@ public class AnalysisHistory {
     }
 
     public void update(AnalysisDto.Response response) {
-    this.summary = response.getSummary();
-    this.totalScore = response.getBudgetHealth().getScore();
-    this.healthStatus = response.getBudgetHealth().getStatus();
-    this.healthDescription = response.getBudgetHealth().getDescription();
-    this.trends = response.getTrends();
-    this.recommendations = response.getRecommendations();
+        this.summary = response.getSummary();
+        this.totalScore = response.getBudgetHealth().getScore();
+        this.healthStatus = response.getBudgetHealth().getStatus();
+        this.healthDescription = response.getBudgetHealth().getDescription();
+        this.trends = response.getTrends();
+        this.recommendations = response.getRecommendations();
     }
 }

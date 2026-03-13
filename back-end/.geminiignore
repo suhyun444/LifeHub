@@ -1,0 +1,39 @@
+# 1. Build & Dependency Directories (토큰 낭비 방지)
+build/
+target/
+out/
+bin/
+.gradle/
+.mvn/
+
+# 2. Compiled Artifacts (바이너리 파일 차단)
+*.class
+*.jar
+*.war
+*.ear
+
+# 3. Security & Environment Files (민감 정보 유출 원천 차단)
+.env
+*.env
+application-secret.yml
+application-secret.properties
+application-prod.yml
+*.jks
+*.p12
+*.pem
+*.key
+
+# 4. IDE & Version Control Meta Files (노이즈 제거)
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.git/
+.svn/
+
+# 5. Logs & Temporary Files
+logs/
+*.log
+*.tmp
+*.bak

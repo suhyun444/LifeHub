@@ -140,12 +140,12 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold text-slate-800 tracking-tight">LifeHub OS</h1>
             <p className="text-slate-500 text-sm">Design your own workflow.</p>
           </div>
-          <button 
+          {/*<button 
             onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-full hover:bg-slate-800 transition-all shadow-lg shadow-slate-300/50 active:scale-95"
           >
             <Plus size={18} /> <span className="text-sm font-bold">Add Widget</span>
-          </button>
+          </button>*/}
         </header>
 
         {/* 그리드 레이아웃 */}
@@ -174,13 +174,13 @@ export default function Dashboard() {
             ))}
           </AnimatePresence>
 
-          <motion.button
+          {/*<motion.button
             layout
             onClick={() => setIsModalOpen(true)}
             className="col-span-1 row-span-1 border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 hover:border-slate-400 hover:bg-slate-200/30 transition-all"
           >
             <Plus size={24} />
-          </motion.button>
+          </motion.button>*/}
         </div>
 
       </div>

@@ -4,14 +4,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Plus, X, CreditCard, Server, Clock, 
+  Plus, X, CreditCard,  Clock, 
   Activity, LayoutGrid, Terminal, Github, MapPin, Navigation
 } from "lucide-react";
 
 // --- 1. 타입 및 설정 정의 ---
 type WidgetSize = "icon" | "small" | "medium" | "wide"; 
 // marker 타입 추가
-type WidgetType = "finance" | "server" | "clock" | "link" | "marker";
+type WidgetType = "finance" | "clock" | "link" | "marker";
 
 interface WidgetItem {
   id: string;
@@ -35,7 +35,6 @@ const WidgetContent = ({ type, size }: { type: WidgetType, size: WidgetSize }) =
   if (size === "icon") {
     switch (type) {
       case "finance": return <div className="flex justify-center items-center h-full bg-blue-500 text-white"><CreditCard size={24}/></div>;
-      case "server": return <div className="flex justify-center items-center h-full bg-slate-800 text-green-400"><Terminal size={24}/></div>;
       case "clock": return <div className="flex justify-center items-center h-full bg-indigo-500 text-white"><Clock size={24}/></div>;
       case "link": return <div className="flex justify-center items-center h-full bg-black text-white"><Github size={28}/></div>;
       case "marker": return <div className="flex justify-center items-center h-full bg-orange-500 text-white"><MapPin size={24}/></div>;
@@ -56,32 +55,6 @@ const WidgetContent = ({ type, size }: { type: WidgetType, size: WidgetSize }) =
             <div className="text-[10px] text-slate-500">이번 달 지출</div>
           </div>
         </Link>
-      );
-    case "server":
-      return (
-        <div className="flex flex-col h-full justify-between p-4 bg-slate-900 text-white relative overflow-hidden">
-          <div className="flex items-center gap-2 text-green-400 z-10">
-            <Activity size={16} />
-            <span className="text-[10px] font-bold uppercase tracking-wider">System</span>
-          </div>
-          
-          <div className="space-y-2 z-10">
-             <div className="flex justify-between text-[10px] text-slate-400">
-               <span>CPU Load</span> <span className="text-white">12%</span>
-             </div>
-             <div className="w-full bg-slate-700 h-1 rounded-full"><div className="bg-green-500 w-[12%] h-full rounded-full"></div></div>
-             
-             {size !== "small" && (
-               <>
-                 <div className="flex justify-between text-[10px] text-slate-400 mt-1">
-                   <span>Memory</span> <span className="text-white">4.2G</span>
-                 </div>
-                 <div className="w-full bg-slate-700 h-1 rounded-full"><div className="bg-purple-500 w-[60%] h-full rounded-full"></div></div>
-               </>
-             )}
-          </div>
-          <div className="absolute -right-4 -bottom-4 text-slate-800 opacity-50"><Server size={80} /></div>
-        </div>
       );
     case "clock":
       return (
@@ -256,11 +229,6 @@ export default function Dashboard() {
                 <section>
                   <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 ml-1">System & Utils</h3>
                   <div className="flex gap-3 overflow-x-auto pb-2">
-                    <button onClick={() => addWidget("server", "medium")} className="flex-none w-40 h-40 bg-slate-900 rounded-xl p-4 text-left text-white hover:scale-105 transition-transform shadow-lg">
-                      <Activity size={20} className="mb-2 text-green-400"/>
-                      <div className="text-xs text-slate-400">System</div>
-                      <div className="font-bold">Server</div>
-                    </button>
                     <button onClick={() => addWidget("clock", "small")} className="flex-none w-40 h-20 bg-indigo-500 text-white rounded-xl flex items-center justify-center font-mono font-bold text-xl hover:scale-105 transition-transform shadow-lg shadow-indigo-500/30">19:35</button>
                     <button onClick={() => addWidget("link", "icon")} className="flex-none w-20 h-20 bg-black text-white rounded-xl flex items-center justify-center hover:scale-105 transition-transform"><Github size={24}/></button>
                   </div>

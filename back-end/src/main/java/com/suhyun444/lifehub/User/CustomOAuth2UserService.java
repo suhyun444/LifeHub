@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.suhyun444.lifehub.card.Entity.User;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>
 {
@@ -28,6 +30,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
     
     @Override
+    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException
     {
         OAuth2User oAuth2User = delegate.loadUser(request);

@@ -66,6 +66,7 @@ public class MarkerService {
         return linkRepository.save(link).getId();
     }
 
+    @Transactional
     public List<MarkerDto> GetMarkers(String email)
     {
         User user = userRepository.findByEmail(email).orElseThrow();

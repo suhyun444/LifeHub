@@ -9,8 +9,8 @@ import ToastProvider from "@/components/ToastProvider"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Build your own dashboard",
+  title: "LifeHub",
+  description: "Design your own dashboard",
   generator: "v0.app",
 }
 

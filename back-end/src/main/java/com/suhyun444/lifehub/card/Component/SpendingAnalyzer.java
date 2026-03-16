@@ -3,6 +3,7 @@ package com.suhyun444.lifehub.card.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.suhyun444.lifehub.card.DTO.AnalysisDto;
 import com.suhyun444.lifehub.card.DTO.GroqResponse;
+import com.suhyun444.lifehub.card.DTO.GroqTransactionDto;
 import com.suhyun444.lifehub.card.DTO.TransactionDto;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestClient;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -44,9 +46,9 @@ public class SpendingAnalyzer {
             
             [분석 원칙 - 반드시 지킬 것]
             1. **뻔한 소리 금지**: "지출을 줄이세요", "아껴 쓰세요" 같은 초등학생도 할 수 있는 조언은 절대 하지 마세요.
-            2. **구체적 지적**: "식비가 늘었습니다" 대신 "스타벅스와 배달의민족 결제가 주말에 집중되어 식비가 폭발했습니다"처럼 상점명과 패턴을 콕 집어 말하세요.
-            3. **간편결제 주의**: '토스', '카카오페이', '네이버페이'는 소비처가 아니라 결제 수단입니다. 이것들이 많다면 "무지성 간편 결제 중독"이나 "출처 불명의 송금 내역"을 경고하세요.
-            4. **재정 모드**: 한달에 60만원 정도면 아끼고 사는겁니다. 한달 60만원을 기준으로 과소비, 적절을 판단해주세요
+            2. **구체적 지적**: "식비가 많습니다" 대신 "식비가 n만원에 전체 지출의 n%를 차지합니다"처럼 수치을 콕 집어 말하세요.
+            3. **간편결제 주의**: 기타 카테고리가 많다면 "무지성 간편 결제 중독"이나 "출처 불명의 송금 내역"을 경고하세요.
+            4. **재정 모드**: 한달에 70만원 정도면 아끼고 사는겁니다. 한달 70만원을 기준으로 과소비, 적절을 판단해주세요
             
             [JSON 포맷 가이드]
             - summary: 전체적인 소비 행태에 대한 3문장 요약 (냉소적인 어조)
@@ -56,10 +58,10 @@ public class SpendingAnalyzer {
             
             [필수 JSON 응답 예시]
             {
-            "summary": "숨만 쉬어도 나가는 고정비가 너무 많습니다. 특히 주말마다 습관적으로 긁는 배달 앱이 당신의 통장을 갉아먹고 있습니다. 정신 차리세요.",
+            "summary": "숨만 쉬어도 나가는 고정비가 너무 많습니다. 특히 습관적으로 긁는 식비에 당신의 통장을 갉아먹고 있습니다. 정신 차리세요.",
             "trends": [
-                { "type": "increase", "category": "식비", "change": "+45%", "description": "스타벅스만 15회 방문, 커피값으로만 10만원 증발" },
-                { "type": "stable", "category": "교통", "change": "0%", "description": "택시비 방어는 잘했지만, 여전히 대중교통 이용이 부족함" }
+                { "type": "increase", "category": "식비", "change": "+45%", "description": "커피값으로만 10만원 증발" },
+                { "type": "stable", "category": "교통", "change": "0%", "description": "값싼 대중교통 이용이 부족함" }
             ],
             "recommendations": [
                 { "title": "배달 앱 삭제", "description": "지금 당장 배달의민족 앱을 지우고 밀키트를 주문하세요.", "priority": "high" },
@@ -73,8 +75,9 @@ public class SpendingAnalyzer {
             }
             """;
 
-            String userPrompt = String.format("월: %s\n내역:\n%s", 
-                    month, objectMapper.writeValueAsString(transactions));
+            List<GroqTransactionDto> maskedTransactions = transactions.stream().map(GroqTransactionDto::from).collect(Collectors.toList());
+            String userPrompt = String.format("내역:\n%s", 
+                     objectMapper.writeValueAsString(maskedTransactions));
 
             Map<String, Object> requestBody = Map.of(
                     "model", "llama-3.3-70b-versatile",

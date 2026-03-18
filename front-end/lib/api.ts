@@ -6,15 +6,10 @@ const redirectToLogin = () => {
 };
 
 const request = async (url: string, options: RequestInit = {}) => {
-  const token = localStorage.getItem('accessToken');
   const headers = new Headers(options.headers);
 
   if (!(options.body instanceof FormData)) {
     headers.set('Content-Type', 'application/json');
-  }
-
-  if (token) {
-    headers.set('Authorization', `Bearer ${token}`);
   }
 
   try{
@@ -22,6 +17,7 @@ const request = async (url: string, options: RequestInit = {}) => {
     const response = await fetch(API_BASE_URL + url, {
       ...options,
       headers,
+      credentials: 'include',
     });
     
     if (!response.ok) {
@@ -30,7 +26,7 @@ const request = async (url: string, options: RequestInit = {}) => {
       }
       throw new Error('API request failed');
     }
-    return response.json();
+    return await response.json();
   }
   catch (error)
   {

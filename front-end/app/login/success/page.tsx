@@ -8,32 +8,23 @@ const LoginSuccessHandler = () => {
   const searchParams = useSearchParams(); // Next.js의 URL 파라미터 훅
 
   useEffect(() => {
-    // 1. URL에서 'token' 파라미터를 추출합니다.
-    const token = searchParams.get('token');
-    if (token) {
-      // 2. 토큰을 localStorage에 저장합니다.
-      localStorage.setItem('accessToken', token);
 
-      const getCookie = (name: string) => {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop()?.split(";").shift();
-      };
-      const returnUrl = getCookie("returnUrl");
-      document.cookie = "returnUrl=; path=/; max-age=0";
+    const getCookie = (name: string) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(";").shift();
+    };
 
-      if (returnUrl) {
-        router.push(returnUrl);
-      } else {
-        router.push("/");
-        window.history.replaceState({}, document.title, "/");
-      }
-    } 
-    else {
-      console.error('No token found in URL.');
-      window.location.href = "/oauth2/authorization/google";
+    const returnUrl = getCookie("returnUrl");
+    document.cookie = "returnUrl=; path=/; max-age=0";
+
+    if (returnUrl) {
+      router.push(returnUrl);
+    } else {
+      router.push("/");
+      window.history.replaceState({}, document.title, "/");
     }
-  }, [router, searchParams]);
+  }, [router]);
 
   return <div>Login in progress...</div>;
 };

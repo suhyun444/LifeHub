@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.suhyun444.lifehub.card.Entity.User;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -29,11 +30,16 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         User user = customOAuth2User.getUser();
 
-        // JWT 생성 및 리디렉션 로직은 동일
         String token = jwtTokenProvider.generateToken(user);
-        String targetUrl = UriComponentsBuilder.fromUriString("https://suhyun444.duckdns.org/login/success")
-                .queryParam("token", token)
-                .build().toUriString();
+        Cookie jwtCookie = new Cookie("accessToken", token);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(true); 
+        jwtCookie.setPath("/"); 
+        jwtCookie.setMaxAge(21600000); 
+
+        response.addCookie(jwtCookie);
+
+        String targetUrl = "https://suhyun444.duckdns.org/login/success";
         
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }

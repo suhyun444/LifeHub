@@ -50,6 +50,7 @@ class OAuth2SuccessHandlerTest {
 
         oAuth2SuccessHandler.onAuthenticationSuccess(request, response, authentication);
 
-        verify(response).sendRedirect(contains("?token=" + generatedToken));
+        String expectedTargetUrl = "https://suhyun444.duckdns.org/login/success";
+        verify(response).sendRedirect(expectedTargetUrl);
     }
 }

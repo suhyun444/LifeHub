@@ -30,7 +30,6 @@ const request = async (url: string, options: RequestInit = {}) => {
   }
   catch (error)
   {
-    localStorage.removeItem('accessToken');
     redirectToLogin()
     console.error()
   }

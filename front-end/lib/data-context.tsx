@@ -49,11 +49,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     checkLogin()
   }, [pathname, router])
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken"); 
-    if (!accessToken) {
-      setTransactions([]); 
-      return; 
-    }
     if(transactions.length != 0)
     {
       return;

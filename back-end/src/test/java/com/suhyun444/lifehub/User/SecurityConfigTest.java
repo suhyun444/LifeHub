@@ -39,7 +39,7 @@ class SecurityConfigTest {
     @DisplayName("인증되지 않은 사용자가 보호된 API(/api/transactions)에 접근하면 403 Forbidden을 반환해야 한다.")
     void accessProtectedResource_WithoutAuth_ReturnsForbidden() throws Exception {
         mockMvc.perform(get("/api/transactions"))
-                .andExpect(status().is3xxRedirection()); 
+                .andExpect(status().is4xxClientError()); 
     }
 
     @Test

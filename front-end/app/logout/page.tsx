@@ -7,8 +7,6 @@ export default function LogoutPage() {
   const router = useRouter();
 
   useEffect(() => {
-    localStorage.removeItem("accessToken");
-    localStorage.clear();
 
     window.location.href = "/oauth2/authorization/google";
     

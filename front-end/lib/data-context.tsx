@@ -49,6 +49,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     checkLogin()
   }, [pathname, router])
   useEffect(() => {
+    if (!isAuthChecked) {
+      return;
+    }
     if(transactions.length != 0)
     {
       return;
@@ -68,7 +71,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     // 함수 실행
     fetchInitialData();
     
-  }, [])
+  }, [isAuthChecked])
 
   const extractCategoriesFromTransactions = (transactionList: PaymentTransaction[]) => {
     const uniqueCategories = Array.from(new Set(transactionList.map((t) => t.category))).sort()

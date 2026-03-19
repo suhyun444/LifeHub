@@ -11,7 +11,9 @@ import org.springframework.data.repository.query.Param;
 import com.suhyun444.lifehub.marker.Entity.Marker;
 
 public interface MarkerRepository extends JpaRepository<Marker,Long>{
+    @Query("SELECT m FROM Marker m LEFT JOIN FETCH m.links WHERE m.user.id = :userId ORDER BY m.sortOrder DESC")
     List<Marker> findAllByUserIdOrderBySortOrderDesc(Long userId);
+
     @Query("SELECT COALESCE(MAX(m.sortOrder), 0) FROM Marker m WHERE m.user.id = :userId")
     Optional<Long> findMaxSortOrder(@Param("userId") Long userId);
 

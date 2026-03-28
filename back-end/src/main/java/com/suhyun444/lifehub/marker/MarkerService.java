@@ -37,8 +37,8 @@ public class MarkerService {
     }   
 
     @Transactional
-    public MarkerDto createMarker(String email, MarkerDto dto) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+    public MarkerDto createMarker(Long userId, MarkerDto dto) {
+        User user = userRepository.findById(userId).orElseThrow();
         Long maxOrder = markerRepository.findMaxSortOrder(user.getId()).orElse(0L);
 
         Long newOrder = maxOrder + 1;
@@ -67,10 +67,9 @@ public class MarkerService {
     }
 
     @Transactional
-    public List<MarkerDto> GetMarkers(String email)
+    public List<MarkerDto> GetMarkers(Long userId)
     {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        List<Marker> markers = markerRepository.findAllByUserIdOrderBySortOrderDesc(user.getId());
+        List<Marker> markers = markerRepository.findAllByUserIdOrderBySortOrderDesc(userId);
 
         List<MarkerDto> results = markers.stream().map(MarkerDto::from).collect(Collectors.toList());
         return results;
@@ -82,8 +81,7 @@ public class MarkerService {
         linkRepository.deleteById(linkId);
     }
     @Transactional
-    public void moveMarker(String email, Long markerId, Long newOrder){
-        User user = userRepository.findByEmail(email).orElseThrow();
+    public void moveMarker(Long userId, Long markerId, Long newOrder){
         Marker marker = markerRepository.findById(markerId)
                 .orElseThrow(() -> new IllegalArgumentException("Marker not found"));
         
@@ -93,9 +91,9 @@ public class MarkerService {
 
 
         if (currentOrder > newOrder) {
-            markerRepository.shiftOrdersIncrement(user.getId(), newOrder, currentOrder);
+            markerRepository.shiftOrdersIncrement(userId, newOrder, currentOrder);
         } else {
-            markerRepository.shiftOrdersDecrement(user.getId(), currentOrder, newOrder);
+            markerRepository.shiftOrdersDecrement(userId, currentOrder, newOrder);
         }
 
         marker.setSortOrder(newOrder);

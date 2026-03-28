@@ -37,7 +37,7 @@ public class JwtTokenProvider {
         Date validity = new Date(now.getTime() + this.tokenValidityInMilliseconds);
 
         return Jwts.builder()
-                .setSubject(String.valueOf(user.getEmail())) // 토큰의 주체 (사용자 ID)
+                .setSubject(String.valueOf(user.getId())) // 토큰의 주체 (사용자 ID)
                 .setIssuedAt(now) // 발급 시간
                 .setExpiration(validity) // 만료 시간
                 .signWith(key, SignatureAlgorithm.HS512) // 사용할 암호화 알고리즘과 키

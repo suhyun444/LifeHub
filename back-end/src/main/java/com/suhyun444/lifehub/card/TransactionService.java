@@ -57,7 +57,7 @@ public class TransactionService {
     }   
 
     @Transactional
-    public List<TransactionDto> uploadAndParseExcel(MultipartFile file, String email) throws Exception
+    public List<TransactionDto> uploadAndParseExcel(MultipartFile file, Long userId) throws Exception
     {
         TransactionParser parser = new KookminTransactionParser();
         List<Transaction> transactions;
@@ -72,7 +72,7 @@ public class TransactionService {
             transactions = parser.parse(sheet);
             categorizeTransactions(transactions);
             
-            User user = userRepository.findByEmail(email).orElseThrow();
+            User user = userRepository.findById(userId).orElseThrow();
             
             importTransactions(transactions,user);
             List<TransactionDto> result = transactionRepository.findByUserIdAndIsDeletedFalse(user.getId()).stream().map(TransactionDto::from).collect(Collectors.toList());
@@ -80,10 +80,9 @@ public class TransactionService {
         }
     }
     @Transactional
-    public List<TransactionDto> getTransactions(String email)
+    public List<TransactionDto> getTransactions(Long userId)
     {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        List<Transaction> transactions = transactionRepository.findByUserIdAndIsDeletedFalse(user.getId());
+        List<Transaction> transactions = transactionRepository.findByUserIdAndIsDeletedFalse(userId);
         List<TransactionDto> result = transactions.stream().map(TransactionDto::from).collect(Collectors.toList());
         return result;
     } 
@@ -108,10 +107,9 @@ public class TransactionService {
         return TransactionDto.from(transaction);
     }
     @Transactional
-    public void clearTransactions(String email) throws Exception
+    public void clearTransactions(Long userId) throws Exception
     {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        transactionRepository.deleteByUserId(user.getId());
+        transactionRepository.deleteByUserId(userId);
         return;
     }
 
@@ -146,7 +144,7 @@ public class TransactionService {
         });
     }
     @Transactional
-    public AnalysisDto.Response getMonthlyAnalysis(String email,AnalysisDto.Request request) {
+    public AnalysisDto.Response getMonthlyAnalysis(Long userId,AnalysisDto.Request request) {
         if (request.getTransactions() == null || request.getTransactions().isEmpty()) {
             throw new IllegalArgumentException("거래 내역이 없습니다.");
         }
@@ -155,7 +153,7 @@ public class TransactionService {
                 request.getTransactions(), 
                 request.getMonth()
         );
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
 
 
         analysisHistoryRepository.findByUserIdAndMonth(user.getId(), request.getMonth())
@@ -174,10 +172,9 @@ public class TransactionService {
 
         return analysisResult;
     }
-    public List<AnalysisDto.Response> getAnalysis(String email)
+    public List<AnalysisDto.Response> getAnalysis(Long userId)
     {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        List<AnalysisHistory> histories = analysisHistoryRepository.findByUserId(user.getId()).orElseThrow();
+        List<AnalysisHistory> histories = analysisHistoryRepository.findByUserId(userId).orElseThrow();
         
         return histories.stream().map(AnalysisDto.Response::from).collect(Collectors.toList());
     }

@@ -31,14 +31,14 @@ public class MarkerController {
     }
     
     @PostMapping("api/markers")
-    public ResponseEntity<MarkerDto> createMarker(@AuthenticationPrincipal String email,@RequestBody MarkerDto markerDto) {
+    public ResponseEntity<MarkerDto> createMarker(@AuthenticationPrincipal Long userId,@RequestBody MarkerDto markerDto) {
         
-        return ResponseEntity.ok(markerService.createMarker(email, markerDto));
+        return ResponseEntity.ok(markerService.createMarker(userId, markerDto));
     }
     
     @GetMapping("api/markers")
-    public ResponseEntity<List<MarkerDto>> getMarkers(@AuthenticationPrincipal String email) {
-        return ResponseEntity.ok(markerService.GetMarkers(email));
+    public ResponseEntity<List<MarkerDto>> getMarkers(@AuthenticationPrincipal Long userId) {
+        return ResponseEntity.ok(markerService.GetMarkers(userId));
     }
 
     @DeleteMapping("api/markers/{markerId}")
@@ -59,8 +59,8 @@ public class MarkerController {
         return ResponseEntity.ok(Map.of("message","Success to delete"));
     }
     @PatchMapping("api/markers/{markerId}/move")
-    public ResponseEntity<?> moveMarker(@AuthenticationPrincipal String email,@PathVariable Long markerId, @RequestBody Map<String, Long> request) {
-        markerService.moveMarker(email,markerId, request.get("newOrder"));
+    public ResponseEntity<?> moveMarker(@AuthenticationPrincipal Long userId,@PathVariable Long markerId, @RequestBody Map<String, Long> request) {
+        markerService.moveMarker(userId,markerId, request.get("newOrder"));
         return ResponseEntity.ok().build();
     }
 }

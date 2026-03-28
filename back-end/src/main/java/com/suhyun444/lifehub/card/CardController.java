@@ -50,8 +50,8 @@ public class CardController {
         ));
     }
     @GetMapping("api/transactions")
-    public ResponseEntity<List<TransactionDto>> getTransactions(@AuthenticationPrincipal String email) {
-        return ResponseEntity.ok(transactionService.getTransactions(email));
+    public ResponseEntity<List<TransactionDto>> getTransactions(@AuthenticationPrincipal Long userId) {
+        return ResponseEntity.ok(transactionService.getTransactions(userId));
     }
     
     @PatchMapping("api/transactions/{id}/category")
@@ -70,10 +70,10 @@ public class CardController {
     }
     @PostMapping("api/transactions/upload")
     public ResponseEntity<?> uploadTransactionsFromExcel(@RequestParam("file") MultipartFile file, 
-                                                        @AuthenticationPrincipal String email) {
+                                                        @AuthenticationPrincipal Long userId) {
       try {
 
-            List<TransactionDto> transactions = transactionService.uploadAndParseExcel(file,email);
+            List<TransactionDto> transactions = transactionService.uploadAndParseExcel(file,userId);
             return ResponseEntity.ok(Map.of("transactions", transactions));
 
         } catch (IllegalArgumentException e) {
@@ -84,11 +84,11 @@ public class CardController {
         }
     }
     @DeleteMapping("api/transactions/clear")
-    public ResponseEntity<?> clearTransactions(@AuthenticationPrincipal String email)
+    public ResponseEntity<?> clearTransactions(@AuthenticationPrincipal Long userId)
     {
         try
         {
-            transactionService.clearTransactions(email);
+            transactionService.clearTransactions(userId);
             return ResponseEntity.ok(Map.of("message","Success to Clear"));
         }
         catch(Exception e)
@@ -98,13 +98,13 @@ public class CardController {
     }
     @PostMapping("api/analysis")
     public ResponseEntity<AnalysisDto.Response> analyzeSpending(@RequestBody AnalysisDto.Request request, 
-                                                                @AuthenticationPrincipal String email) 
+                                                                @AuthenticationPrincipal Long userId) 
     {
-        return ResponseEntity.ok(transactionService.getMonthlyAnalysis(email,request));
+        return ResponseEntity.ok(transactionService.getMonthlyAnalysis(userId,request));
     }
     @GetMapping("api/analysis")
-    public ResponseEntity<List<AnalysisDto.Response>> getAnalysis(@AuthenticationPrincipal String email) {        
-        return ResponseEntity.ok(transactionService.getAnalysis(email));
+    public ResponseEntity<List<AnalysisDto.Response>> getAnalysis(@AuthenticationPrincipal Long userId) {        
+        return ResponseEntity.ok(transactionService.getAnalysis(userId));
     }
        
 }

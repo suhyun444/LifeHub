@@ -33,11 +33,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 2. 토큰이 유효한지 검증합니다.
             if (token != null && jwtTokenProvider.validateToken(token)) {
                 // 3. 토큰에서 사용자 ID(또는 이메일)를 꺼냅니다.
-                String userEmail = jwtTokenProvider.getUserIdFromToken(token);
+                String userIdString = jwtTokenProvider.getUserIdFromToken(token);
+                Long userId = Long.parseLong(userIdString);
 
                 // 4. Spring Security가 이해할 수 있는 인증 객체를 만듭니다.
                 AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userEmail, // 보통 Principal에는 UserDetails 객체를 넣습니다.
+                    userId, // 보통 Principal에는 UserDetails 객체를 넣습니다.
                         null,
                         AuthorityUtils.NO_AUTHORITIES
                         );

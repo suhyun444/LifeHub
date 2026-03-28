@@ -30,7 +30,10 @@ const request = async (url: string, options: RequestInit = {}) => {
   }
   catch (error)
   {
-    redirectToLogin()
+    if(error === 'UnAuthorized')
+    {
+      redirectToLogin()
+    }
     console.error()
   }
 

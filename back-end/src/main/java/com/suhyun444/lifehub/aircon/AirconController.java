@@ -5,7 +5,9 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class AirconController {
     private final AirconService airconService;
 
@@ -13,17 +15,17 @@ public class AirconController {
         this.airconService = airconService;
     }
 
-    @GetMapping
+    @GetMapping("api/aircon")
     public ResponseEntity<AirconDto> getAircon() {
         return ResponseEntity.ok(airconService.getTemperature());
     }
 
-    @PostMapping("/up")
+    @PostMapping("api/aircon/up")
     public ResponseEntity<AirconDto> up() {
         return ResponseEntity.ok(airconService.increaseTemperature());
     }
 
-    @PostMapping("/down")
+    @PostMapping("api/aircon/down")
     public ResponseEntity<AirconDto> down() {
         return ResponseEntity.ok(airconService.decreaseTemperature());
     }

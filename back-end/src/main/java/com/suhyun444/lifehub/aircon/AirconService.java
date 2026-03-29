@@ -33,17 +33,17 @@ public class AirconService {
 
     @Transactional
     public AirconDto increaseTemperature() {
-        Aircon aircon = airconRepository.findById(1L).orElseThrow();
+        Aircon aircon = airconRepository.findByIdForUpdate(1L).orElseThrow();
         aircon.setTemperature(aircon.getTemperature() + 1);
-        airconRepository.saveAndFlush(aircon); 
+        airconRepository.save(aircon); 
         return new AirconDto(aircon.getTemperature());
     }
 
     @Transactional
     public AirconDto decreaseTemperature() {
-        Aircon aircon = airconRepository.findById(1L).orElseThrow();
+        Aircon aircon = airconRepository.findByIdForUpdate(1L).orElseThrow();
         aircon.setTemperature(aircon.getTemperature() - 1);
-        airconRepository.saveAndFlush(aircon);
+        airconRepository.save(aircon);
         return new AirconDto(aircon.getTemperature());
     }
     
@@ -52,6 +52,6 @@ public class AirconService {
     public void resetTemperature() {
         Aircon aircon = airconRepository.findById(1L).orElseThrow();
         aircon.setTemperature(20);
-        airconRepository.saveAndFlush(aircon);
+        airconRepository.save(aircon);
     }
 }

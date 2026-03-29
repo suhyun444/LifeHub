@@ -50,7 +50,7 @@ public class AirconService {
     // 테스트 초기화를 위한 온도 리셋 기능
     @Transactional
     public void resetTemperature() {
-        Aircon aircon = airconRepository.findById(1L).orElseThrow();
+        Aircon aircon = airconRepository.findByIdForUpdate(1L).orElseThrow();
         aircon.setTemperature(20);
         airconRepository.save(aircon);
     }

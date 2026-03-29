@@ -67,12 +67,12 @@ class AirconServiceTest {
     @DisplayName("increaseTemperature: 온도를 1 올리고 저장한다")
     void increaseTemperature_Success() {
         Aircon mockAircon = new Aircon(1L, 20);
-        when(airconRepository.findById(1L)).thenReturn(Optional.of(mockAircon));
+        when(airconRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(mockAircon));
 
         AirconDto result = airconService.increaseTemperature();
 
         assertEquals(21, result.temperature());
-        verify(airconRepository, times(1)).saveAndFlush(mockAircon);
+        verify(airconRepository, times(1)).save(mockAircon);
     }
 
     // --- 4. decreaseTemperature() 테스트 ---
@@ -80,12 +80,12 @@ class AirconServiceTest {
     @DisplayName("decreaseTemperature: 온도를 1 내리고 저장한다")
     void decreaseTemperature_Success() {
         Aircon mockAircon = new Aircon(1L, 20);
-        when(airconRepository.findById(1L)).thenReturn(Optional.of(mockAircon));
+        when(airconRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(mockAircon));
 
         AirconDto result = airconService.decreaseTemperature();
 
         assertEquals(19, result.temperature());
-        verify(airconRepository, times(1)).saveAndFlush(mockAircon);
+        verify(airconRepository, times(1)).save(mockAircon);
     }
 
     // --- 5. resetTemperature() 테스트 ---
@@ -93,11 +93,11 @@ class AirconServiceTest {
     @DisplayName("resetTemperature: 온도를 다시 20도로 초기화한다")
     void resetTemperature_Success() {
         Aircon mockAircon = new Aircon(1L, 35); // 비정상적으로 높은 온도
-        when(airconRepository.findById(1L)).thenReturn(Optional.of(mockAircon));
+        when(airconRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(mockAircon));
 
         airconService.resetTemperature();
 
         assertEquals(20, mockAircon.getTemperature());
-        verify(airconRepository, times(1)).saveAndFlush(mockAircon);
+        verify(airconRepository, times(1)).save(mockAircon);
     }
 }

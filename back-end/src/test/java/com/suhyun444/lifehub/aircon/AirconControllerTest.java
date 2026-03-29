@@ -38,6 +38,9 @@ class AirconControllerTest {
     @MockitoBean
     private AirconService airconService;
 
+    @MockitoBean
+    private AirconOptimisticLockFacade airconFacade;
+
     // --- 1. GET /api/aircon ---
     @Test
     @DisplayName("getAircon: 현재 에어컨 온도를 조회한다")
@@ -55,7 +58,7 @@ class AirconControllerTest {
     @DisplayName("up: 에어컨 온도를 올린다")
     @WithMockUser
     void up_IncreasesTemp() throws Exception {
-        given(airconService.increaseTemperature()).willReturn(new AirconDto(21));
+        given(airconFacade.increaseTemperatureWithRetry()).willReturn(new AirconDto(21));
 
         mockMvc.perform(post("/api/aircon/up").with(csrf()))
                 .andExpect(status().isOk())
@@ -67,7 +70,7 @@ class AirconControllerTest {
     @DisplayName("down: 에어컨 온도를 내린다")
     @WithMockUser
     void down_DecreasesTemp() throws Exception {
-        given(airconService.decreaseTemperature()).willReturn(new AirconDto(19));
+        given(airconFacade.decreaseTemperatureWithRetry()).willReturn(new AirconDto(19));
 
         mockMvc.perform(post("/api/aircon/down").with(csrf()))
                 .andExpect(status().isOk())

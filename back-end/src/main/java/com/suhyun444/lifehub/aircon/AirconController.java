@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AirconController {
     private final AirconService airconService;
+    private final AirconOptimisticLockFacade airconFacade;
 
-    public AirconController(AirconService airconService) {
+    public AirconController(AirconService airconService, AirconOptimisticLockFacade airconFacade) {
         this.airconService = airconService;
+        this.airconFacade = airconFacade;
     }
 
     @GetMapping("api/aircon")
@@ -21,13 +23,13 @@ public class AirconController {
     }
 
     @PostMapping("api/aircon/up")
-    public ResponseEntity<AirconDto> up() {
-        return ResponseEntity.ok(airconService.increaseTemperature());
+    public ResponseEntity<AirconDto> up() throws InterruptedException{
+        return ResponseEntity.ok(airconFacade.increaseTemperatureWithRetry());
     }
 
     @PostMapping("api/aircon/down")
-    public ResponseEntity<AirconDto> down() {
-        return ResponseEntity.ok(airconService.decreaseTemperature());
+    public ResponseEntity<AirconDto> down() throws InterruptedException{
+        return ResponseEntity.ok(airconFacade.decreaseTemperatureWithRetry());
     }
     
     @PostMapping("api/aircon/reset")

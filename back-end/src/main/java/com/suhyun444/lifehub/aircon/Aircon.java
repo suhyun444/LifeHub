@@ -2,6 +2,7 @@ package com.suhyun444.lifehub.aircon;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 
 @Entity
 public class Aircon {
@@ -9,6 +10,9 @@ public class Aircon {
     @Id
     private Long id;
     private Integer temperature;
+
+    @Version
+    private Long version;
 
     protected Aircon() {}
 

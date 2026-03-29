@@ -33,25 +33,22 @@ public class AirconService {
 
     @Transactional
     public AirconDto increaseTemperature() {
-        Aircon aircon = airconRepository.findByIdForUpdate(1L).orElseThrow();
+        Aircon aircon = airconRepository.findById(1L).orElseThrow();
         aircon.setTemperature(aircon.getTemperature() + 1);
-        airconRepository.save(aircon); 
         return new AirconDto(aircon.getTemperature());
     }
 
     @Transactional
     public AirconDto decreaseTemperature() {
-        Aircon aircon = airconRepository.findByIdForUpdate(1L).orElseThrow();
+        Aircon aircon = airconRepository.findById(1L).orElseThrow();
         aircon.setTemperature(aircon.getTemperature() - 1);
-        airconRepository.save(aircon);
         return new AirconDto(aircon.getTemperature());
     }
     
     // 테스트 초기화를 위한 온도 리셋 기능
     @Transactional
     public void resetTemperature() {
-        Aircon aircon = airconRepository.findByIdForUpdate(1L).orElseThrow();
+        Aircon aircon = airconRepository.findById(1L).orElseThrow();
         aircon.setTemperature(20);
-        airconRepository.save(aircon);
     }
 }

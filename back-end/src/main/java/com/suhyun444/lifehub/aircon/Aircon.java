@@ -11,9 +11,6 @@ public class Aircon {
     private Long id;
     private Integer temperature;
 
-    @Version
-    private Long version;
-
     protected Aircon() {}
 
     public Aircon(Long id, Integer temperature) {
